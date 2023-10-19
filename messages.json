@@ -1,0 +1,87 @@
+[
+    {
+        "id": 1,
+        "message": "Login effettuato correttamente",
+        "style": "success"
+    },
+    {
+        "id": 2,
+        "message": "Registrazione effettuata",
+        "style": "success"
+    },
+    {
+        "id": 3,
+        "message": "Logout effettuato correttamente",
+        "style": "primary"
+    },
+    {
+        "id": 4,
+        "message": "Le password non corrispondono",
+        "style": "danger"
+    },
+    {
+        "id": 5,
+        "message": "Utente già presente nel sistema",
+        "style": "danger"
+    },
+    {
+        "id": 6,
+        "message": "Qualcosa è andato storto nella registrazione dell'utente",
+        "style": "danger"
+    },
+    {
+        "id": 7,
+        "message": "Utente non presente nel sistema",
+        "style": "danger"
+    },
+    {
+        "id": 8,
+        "message": "Password errata",
+        "style": "danger"
+    },
+    {
+        "id": 9,
+        "message": "Logout effettuato correttamente",
+        "style": "success"
+    },
+    {
+        "id": 10,
+        "message": "Reset Password effettuato. Controlla l'email",
+        "style": "primary"
+    },
+    {
+        "id": 11,
+        "message": "Errore reset Password",
+        "style": "danger"
+    },
+    {
+        "id": 12,
+        "message": "Password errata",
+        "style": "danger"
+    },
+    {
+        "id": 13,
+        "message": "Password modificata con successo",
+        "style": "success"
+    },
+    {
+        "id": 14,
+        "message": "Errore sul salvataggio del tema",
+        "style": "danger"
+    },
+    {
+        "id": 15,
+        "message": "Errore sul salvataggio dell'immagine",
+        "style": "danger"
+    },
+    {
+        "id": 16,
+        "message": "Errore sul salvataggio delle informazioni",
+        "style": "danger"
+    },
+    {
+        "id": 17,
+        "message": "Informazioni salvate correttamente",
+        "style": "success"
+    }
+]
