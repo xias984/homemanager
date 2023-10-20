@@ -66,25 +66,21 @@
     }
 
     #message-column {
-        background-color:red;
         flex: 85%;
         padding-right: 10px;
     }
 
     #message {
-        background-color: blue;
         font-weight: bold;
         color: <?= $link?>;
         margin-bottom: 10px; /* Spazio tra il nome e il testo del messaggio */
     }
 
     #message-text {
-        background-color:green;
         margin-bottom: 10px;
     }
 
     #actions-column {
-        background-color: black;
         flex: 15%; /* La seconda colonna occupa il 30% dello spazio */
         padding-left: 10px; /* Aggiungiamo spazio tra le colonne */
         text-align: right;

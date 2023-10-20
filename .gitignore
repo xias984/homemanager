@@ -1,3 +1,4 @@
 /backupdb.sh
 /dump_file.sql
 /system/env.php
+/.gitignore
