@@ -58,47 +58,58 @@
         text-overflow: ellipsis;
     }
 
-    #chat-box {
+    .chat-box {
         width: 100%;
         background-color: <?=$sfondo?>;
         padding: 10px;
-        display: flex; /* Utilizziamo il flexbox per dividere in due colonne */
+        display: flex;
+        border: 1px solid <?=$sfondo2?>;
     }
 
-    #message-column {
+    .message-column {
         flex: 85%;
         padding-right: 10px;
     }
 
-    #message {
+    .message {
         font-weight: bold;
         color: <?= $link?>;
-        margin-bottom: 10px; /* Spazio tra il nome e il testo del messaggio */
     }
 
-    #message-text {
-        margin-bottom: 10px;
+    .answer {
+        font-weight: bold;
+        color: <?= $link?>;
+        text-align:right;
     }
 
-    #actions-column {
+    .answer-text {
+        text-align:right;   
+    }
+
+    .actions-column {
         flex: 15%; /* La seconda colonna occupa il 30% dello spazio */
         padding-left: 10px; /* Aggiungiamo spazio tra le colonne */
         text-align: right;
     }
 
-    #timestamp {
+    .timestamp {
         font-size: 12px;
-        color: #888;
-        margin-bottom: 10px; /* Spazio tra l'ora e le azioni */
+        color: <?=$secondario?>;
+        margin-bottom: 10px;
     }
 
-    #actions {
+    .actions {
         font-size: 12px;
     }
 
     .title {
         text-align:center;
         margin-bottom: 20px;
+    }
+
+    .custom-form {
+        display: flex;
+        width: 100%;
     }
     </style>
 </head>

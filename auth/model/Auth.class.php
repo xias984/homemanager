@@ -51,6 +51,18 @@ class Auth {
         }
     }
 
+    public function getInfoUserById($id) {
+        global $conn;
+
+        $query = "SELECT firstname, familyname, email, admin FROM $this->table WHERE id = ".$id;
+        $result = mysqli_query($conn, $query);
+
+        if ($result->num_rows === 1) {
+            $userInfo = $result->fetch_assoc();
+            return $userInfo;
+        }
+    }
+
     public function getInfoUserByEmail($email) {
         global $conn;
 

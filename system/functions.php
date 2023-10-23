@@ -42,7 +42,7 @@ function getPage()
                 redirect($page);
                 break;
             case 'dashboard':
-                redirect($page);
+                redirect('login', $page);
                 break;
             case 'settings':
                 redirect('login', $page);

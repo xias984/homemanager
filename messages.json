@@ -83,5 +83,35 @@
         "id": 17,
         "message": "Informazioni salvate correttamente",
         "style": "success"
+    },
+    {
+        "id": 18,
+        "message": "Post inserito con successo",
+        "style": "success"
+    },
+    {
+        "id": 19,
+        "message": "Errore inserimento nuovo post",
+        "style": "danger"
+    },
+    {
+        "id": 20,
+        "message": "Risposta inserita con successo",
+        "style": "success"
+    },
+    {
+        "id": 21,
+        "message": "Errore inserimento nuova risposta",
+        "style": "danger"
+    },
+    {
+        "id": 22,
+        "message": "Risposta cancellata",
+        "style": "success"
+    },
+    {
+        "id": 23,
+        "message": "Post cancellato",
+        "style": "success"
     }
 ]
