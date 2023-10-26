@@ -93,4 +93,31 @@ class Auth {
             return $result->fetch_assoc();
         }
     }
+
+    public function getUsers() {
+        global $conn;
+
+        $query = "SELECT id, firstname, familyname, email, admin FROM $this->table";
+        $result = mysqli_query($conn, $query);
+
+        $users = array();
+
+        if ($result->num_rows > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $users[] = $row;    
+            }
+            $row = mysqli_fetch_assoc($result);
+        }
+
+        return $users;
+    }
+
+    public function deleteUserById($id) {
+        global $conn;
+
+        $query = "DELETE FROM $this->table WHERE id = $id";
+        $result = mysqli_query($conn, $query);
+
+        return mysqli_query($conn, $query);
+    }
 }

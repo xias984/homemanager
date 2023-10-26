@@ -1,29 +1,19 @@
 <?php
-global $sfondo;
+global $colors;
 global $conn;
 ?>
 <div class="row">
-    <nav class="col-md-12 d-md-block sidebar rounded" style="background-color: <?=$sfondo?>">
+    <nav class="col-md-12 d-md-block sidebar rounded" style="background-color: <?=$colors['sfondo']?>">
         <div class="position-sticky">
             <ul class="nav flex-column">
                 <li class="nav-item mb-3">
                 
                 </li>
-                <?php if (isAdmin()): ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#admin">
-                        <h5>Admin Manager</h5>
+                    <a class="nav-link" href="index.php?page=dashboard">
+                        <h5>Dashboard</h5>
                     </a>
-                    <ul class="nav flex-column ml-3 collapse" id="admin">
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.php?page=listusers">Lista utenti</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.php?page=configuration">Configurazione</a>
-                        </li>
-                    </ul>
                 </li>
-                <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" href="#" data-toggle="collapse" data-target="#finance">
                         <h5>Finance Manager</h5>
@@ -63,6 +53,21 @@ global $conn;
                         </li>
                     </ul>
                 </li>
+                <?php if (isAdmin()): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#admin">
+                        <h5>Admin Manager</h5>
+                    </a>
+                    <ul class="nav flex-column ml-3 collapse" id="admin">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?page=listusers">Lista utenti</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?page=configuration">Configurazione</a>
+                        </li>
+                    </ul>
+                </li>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>

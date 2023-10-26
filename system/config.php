@@ -15,17 +15,5 @@ if ($row) {
 	$maintenance 	= $row['maintenance'];
 
 	$colors			= $config->selectThemeFromConfiguration($row['id_color']);
-	
-	if ($colors) {
-		$colori = explode(',',$colors['palette']);
-		foreach ($colori as $colore) {
-			$sfondo     = $colori[0];
-			$sfondo2    = $colori[1];
-			$principale = $colori[2];
-			$subtitle   = $colori[3];
-			$secondario = $colori[4];
-			$link       = $colori[5];
-		}
-	}
 }
 ?>

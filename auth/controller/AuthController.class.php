@@ -5,7 +5,7 @@ class AuthController {
     private $userData;
     private $user;
 
-    public function __construct($userData) {
+    public function __construct($userData = null) {
         $this->userData = $userData;
         $this->user = new Auth();
     }
@@ -133,6 +133,41 @@ class AuthController {
             }
         } else {
             header("Location: " .refreshPageWOmsg(). "&idmsg=12");
+        }
+    }
+
+    public function listUserTable() {
+        $configTable = new ConfigurationController();
+        $userList = array(
+            array('Nome', 'Cognome', 'Email', 'Admin', 'Actions') // Intestazione
+        );
+        
+        $userArray = array();
+        if ($this->user->getUsers()) {
+            $usersData = $this->user->getUsers();
+            foreach ($usersData as $userData) {
+                $userArray[] = [ 
+                    ucfirst($userData['firstname']), 
+                    ucfirst($userData['familyname']), 
+                    strtolower($userData['email']), 
+                    $userData['admin'],
+                    $userData['id']
+                ];
+            }
+            $userList = array_merge($userList, $userArray);
+        }
+    
+        return $userList;
+    }
+
+    public function removeUser() {
+        if (!empty($this->userData['deleteid']) && isset($this->userData['deleteid'])) {
+            if ($this->user->deleteUserById($this->userData['deleteid'])) {
+                $idmsg = 24;
+            } else {
+                $idmsg = 25;
+            }
+            header("Location: " . refreshPageWOmsg() . "&idmsg=" . $idmsg);
         }
     }
 }

@@ -107,11 +107,21 @@
     {
         "id": 22,
         "message": "Risposta cancellata",
-        "style": "success"
+        "style": "primary"
     },
     {
         "id": 23,
         "message": "Post cancellato",
-        "style": "success"
+        "style": "primary"
+    },
+    {
+        "id": 24,
+        "message": "Utente cancellato con successo",
+        "style": "primary"
+    },
+    {
+        "id": 25,
+        "message": "Errore cancellazione utente",
+        "style": "danger"
     }
 ]

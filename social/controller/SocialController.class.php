@@ -75,12 +75,16 @@ class SocialController
     
         if (!empty($postData['deletereply'])) {
             $idToDelete = $postData['deletereply'];
+            $idmsg = 22;
+            $idReply = true;
         } elseif (!empty($postData['deletepost'])) {
             $idToDelete = $postData['deletepost'];
+            $idmsg = 23;
         }
     
         if ($idToDelete !== null) {
             if ($this->social->deleteById($idToDelete, $idReply)) {
+                header("Location: " . refreshPageWOmsg() . "&idmsg=" . $idmsg);
             }
         }
     }       

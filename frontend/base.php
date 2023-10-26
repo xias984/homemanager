@@ -17,28 +17,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
     body {
-        background-color: <?=$sfondo?>;
-        color: <?=$principale?>;
+        background-color: <?=$colors['sfondo']?>;
+        color: <?=$colors['principale']?>;
     }
 
     .container {
-        background-color: <?=$sfondo2?>;
+        background-color: <?=$colors['sfondo2']?>;
     }
 
     h1,
     h2 {
-        color: <?=$secondario?>;
+        color: <?=$colors['secondario']?>;
     }
 
     h3,
     h4,
     h5,
     h6 {
-        color: <?=$subtitle?>;
+        color: <?=$colors['subtitle']?>;
     }
 
     a {
-        color: <?=$link?>;
+        color: <?=$colors['link']?>;
         text-decoration: none;
     }
 
@@ -60,10 +60,10 @@
 
     .chat-box {
         width: 100%;
-        background-color: <?=$sfondo?>;
+        background-color: <?=$colors['sfondo']?>;
         padding: 10px;
         display: flex;
-        border: 1px solid <?=$sfondo2?>;
+        border: 1px solid <?=$colors['sfondo2']?>;
     }
 
     .message-column {
@@ -73,12 +73,12 @@
 
     .message {
         font-weight: bold;
-        color: <?= $link?>;
+        color: <?= $colors['link']?>;
     }
 
     .answer {
         font-weight: bold;
-        color: <?= $link?>;
+        color: <?= $colors['link']?>;
         text-align:right;
     }
 
@@ -87,8 +87,8 @@
     }
 
     .actions-column {
-        flex: 15%; /* La seconda colonna occupa il 30% dello spazio */
-        padding-left: 10px; /* Aggiungiamo spazio tra le colonne */
+        flex: 15%;
+        padding-left: 10px;
         text-align: right;
     }
 
@@ -107,9 +107,21 @@
         margin-bottom: 20px;
     }
 
+    /* Form dashboard */
     .custom-form {
         display: flex;
         width: 100%;
+    }
+
+    /* Tabelle */
+    .table {
+        background-color: <?=$colors['sfondo2']?>;
+        color: <?=$colors['principale']?>;
+    }
+
+    .table th {
+        background-color: <?=$colors['sfondo']?>;
+        color: <?=$colors['secondario']?>;
     }
     </style>
 </head>
