@@ -91,7 +91,6 @@ function refreshPageWOmsg($url = null)
 {
     $url = $url ?: $_SERVER['REQUEST_URI'];
     return preg_replace('/&.*$/', '', $url);
-    //return preg_replace('/&?idmsg=\d+/', '', $url);
 }
 
 function ensureEnvFileExists() {

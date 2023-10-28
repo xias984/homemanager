@@ -31,10 +31,6 @@ $auth->register();
                 <label for="password2">Conferma Password:</label>
                 <input type="password" class="form-control" id="password2" name="password2" placeholder="Conferma la tua password" required>
             </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="admin" name="admin">
-                <label class="form-check-label" for="admin">Utente Admin</label>
-            </div>
             <button type="submit" class="btn btn-primary">Iscriviti</button>
         </form>
     </div>

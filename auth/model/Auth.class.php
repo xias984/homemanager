@@ -94,10 +94,12 @@ class Auth {
         }
     }
 
-    public function getUsers() {
+    public function getUsers($wheAdmin = null) {
         global $conn;
 
-        $query = "SELECT id, firstname, familyname, email, admin FROM $this->table";
+        $where = !empty($wheAdmin) ? ' WHERE admin = 1' : '';
+
+        $query = "SELECT id, firstname, familyname, email, admin FROM $this->table$where";
         $result = mysqli_query($conn, $query);
 
         $users = array();
@@ -116,8 +118,18 @@ class Auth {
         global $conn;
 
         $query = "DELETE FROM $this->table WHERE id = $id";
-        $result = mysqli_query($conn, $query);
 
         return mysqli_query($conn, $query);
     }
+
+    public function updateUserById($id, $userData, $excludeAdminField = 0) {
+        global $conn;
+    
+        $excludeAdminField = ($excludeAdminField) ? '' : ', admin = ' . (!empty($userData[3]) && $userData[3] == 'on' ? 1 : 0);
+    
+        $query = "UPDATE $this->table SET firstname = '$userData[0]', familyname = '$userData[1]', email = '$userData[2]'$excludeAdminField WHERE id = $id";
+    
+        return mysqli_query($conn, $query);
+    }
+    
 }

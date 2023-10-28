@@ -27,8 +27,18 @@ CREATE TABLE `colors` (
   `palette` varchar(255) NOT NULL,
   `description` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `colors`
+--
+
+LOCK TABLES `colors` WRITE;
+/*!40000 ALTER TABLE `colors` DISABLE KEYS */;
+INSERT INTO `colors` VALUES (1,'#F5F5F5,#FFFFFF,#3498DB,#333333,#666666,#2980B9','blu'),(2,'#E9F7EF,#FFFFFF,#27AE60,#333333,#666666,#2ECC71','verde'),(3,'#F2E9F2,#FFFFFF,#9B59B6,#333333,#666666,#8E44AD','viola'),(4,'#121212,#1E1E1E,#3498DB,#888888,#CCCCCC,#2980B9','Scuro profondo'),(5,'#1C1C1C,#222222,#FFD700,#888888,#CCCCCC,#FF5733','Scuro Elegante'),(9,'#333333,#292929,#FF5733,#888888,#CCCCCC,#E67E22','Scuro minimalista');
+/*!40000 ALTER TABLE `colors` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `configuration`
@@ -45,8 +55,37 @@ CREATE TABLE `configuration` (
   `logo` varchar(60) DEFAULT NULL,
   `id_color` tinyint NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `configuration`
+--
+
+LOCK TABLES `configuration` WRITE;
+/*!40000 ALTER TABLE `configuration` DISABLE KEYS */;
+INSERT INTO `configuration` VALUES (1,'Home Manager','Gestionale domestico',0,'./assets/images/logo_homemanager.png',1);
+/*!40000 ALTER TABLE `configuration` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `social`
+--
+
+DROP TABLE IF EXISTS `social`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `social` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `post` varchar(255) NOT NULL,
+  `iduser` int NOT NULL,
+  `data` datetime NOT NULL,
+  `reply` enum('R','N') NOT NULL,
+  `idreply` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Table structure for table `users`
@@ -63,8 +102,18 @@ CREATE TABLE `users` (
   `admin` tinyint(1) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Daniel','Costarelli','xias984@gmail.com',1,'$2y$10$8jFJwKsL28jOlHeCYsm.uuFiAfrMWfXlQl769/K/5J8ABv9WAcfjS');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -75,4 +124,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-19 13:26:51
+-- Dump completed on 2023-10-27 10:21:53

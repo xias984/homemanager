@@ -123,5 +123,15 @@
         "id": 25,
         "message": "Errore cancellazione utente",
         "style": "danger"
+    },
+    {
+        "id": 26,
+        "message": "Informazioni utente aggiornate con successo",
+        "style": "success"
+    },
+    {
+        "id": 27,
+        "message": "Campo Admin obbligatorio",
+        "style": "danger"
     }
 ]

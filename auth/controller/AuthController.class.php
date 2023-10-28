@@ -26,6 +26,9 @@ class AuthController {
         $consent = false;
         
         if (!empty($this->userData) && $this->validateData()) {
+            // Controllo se ci sono utenti admin, se non ci sono procedo con la registrazione come utente admin
+            $admin = $this->user->getUsers(1) ? 0 : 1;
+
             // Controllo se le password coincidono
             if (!empty($this->userData['password']) && !empty($this->userData['password2'])) {
                 if ($this->userData['password'] == $this->userData['password2']) {
@@ -45,16 +48,13 @@ class AuthController {
                 $consent = true;
             }
             
-            // Assegno valore booleano al campo admin access
-            $this->userData['admin'] = (!empty($this->userData['admin']) && $this->userData['admin'] == 'on') ? 1 : 0;
-            
             if ($consent) {
                 $result = $this->user->createUser(
                     ucfirst($this->userData['firstname']), 
                     ucfirst($this->userData['familyname']), 
                     $this->userData['email'], 
                     trim($this->userData['password']), 
-                    $this->userData['admin']
+                    $admin
                 );
 
                 if ($result) {
@@ -169,5 +169,25 @@ class AuthController {
             }
             header("Location: " . refreshPageWOmsg() . "&idmsg=" . $idmsg);
         }
+    }
+
+    public function editUser($userPost) {
+        if (!empty($this->userData['editid']) && isset($this->userData['editid'])) {
+            $isAdminPresent = $this->user->getUsers(1); // Verifica se ci sono altri utenti con il ruolo admin
+    
+            if (count($isAdminPresent) > 1) {
+                // Consentire l'aggiornamento di tutti i campi, inclusi "admin"
+                if ($this->user->updateUserById($this->userData['editid'], $userPost)) {
+                    $idmsg = 26; // Messaggio di successo
+                }
+            } else {
+                // Consentire l'aggiornamento di tutti i campi tranne "admin"
+                if ($this->user->updateUserById($this->userData['editid'], $userPost, 1)) {
+                    $idmsg = 27; // Messaggio di successo
+                }
+            }
+        }
+    
+        header("Location: " . refreshPageWOmsg() . "&idmsg=" . $idmsg);
     }
 }
