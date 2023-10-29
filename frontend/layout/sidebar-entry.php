@@ -10,12 +10,12 @@ global $conn;
                 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=dashboard">
+                    <a class="nav-link cursor-pointer" href="index.php?page=dashboard">
                         <h5>Dashboard</h5>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" data-target="#finance">
+                    <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#finance">
                         <h5>Finance Manager</h5>
                     </a>
                     <ul class="nav flex-column ml-3 collapse" id="finance">
@@ -28,7 +28,7 @@ global $conn;
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" data-target="#submenu1">
+                    <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#submenu1">
                         <h5>Password Manager</h5>
                     </a>
                     <ul class="nav flex-column ml-3 collapse" id="submenu1">
@@ -41,7 +41,7 @@ global $conn;
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" data-target="#submenu2">
+                    <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#submenu2">
                         <h5>Photo Manager</h5>
                     </a>
                     <ul class="nav flex-column ml-3 collapse" id="submenu2">
@@ -55,7 +55,7 @@ global $conn;
                 </li>
                 <?php if (isAdmin()): ?>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" data-target="#admin">
+                    <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#admin">
                         <h5>Admin Manager</h5>
                     </a>
                     <ul class="nav flex-column ml-3 collapse" id="admin">

@@ -122,12 +122,10 @@ class Auth {
         return mysqli_query($conn, $query);
     }
 
-    public function updateUserById($id, $userData, $excludeAdminField = 0) {
+    public function updateUserById($id, $userData) {
         global $conn;
-    
-        $excludeAdminField = ($excludeAdminField) ? '' : ', admin = ' . (!empty($userData[3]) && $userData[3] == 'on' ? 1 : 0);
-    
-        $query = "UPDATE $this->table SET firstname = '$userData[0]', familyname = '$userData[1]', email = '$userData[2]'$excludeAdminField WHERE id = $id";
+
+        $query = "UPDATE $this->table SET firstname = '$userData[0]', familyname = '$userData[1]', email = '$userData[2]', admin = $userData[3] WHERE id = $id";
     
         return mysqli_query($conn, $query);
     }

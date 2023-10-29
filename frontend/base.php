@@ -58,6 +58,7 @@
         text-overflow: ellipsis;
     }
 
+    /* Social */
     .chat-box {
         width: 100%;
         background-color: <?=$colors['sfondo']?>;
@@ -94,7 +95,7 @@
 
     .timestamp {
         font-size: 12px;
-        color: <?=$secondario?>;
+        color: <?=$colors['secondario']?>;
         margin-bottom: 10px;
     }
 
@@ -105,6 +106,10 @@
     .title {
         text-align:center;
         margin-bottom: 20px;
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
     }
 
     /* Form dashboard */

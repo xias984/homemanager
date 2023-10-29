@@ -87,5 +87,21 @@ class SocialController
                 header("Location: " . refreshPageWOmsg() . "&idmsg=" . $idmsg);
             }
         }
-    }       
+    }
+    
+    public function editPost($idPost, $newPost) {
+        if (!empty($idPost['editpost'])) {
+            $postArray = $this->social->getPostFromId($idPost['editpost']);
+            if (!empty($newPost)) {
+                $newPostArray = array(
+                    'id' => $idPost['editpost'],
+                    'post' => $newPost['editpost'],
+                    'data' => $this->datetime
+                );
+    
+                $this->social->updatePostFromId($newPostArray);
+                header("Location: " . refreshPageWOmsg() . "&idmsg=28");
+            }
+        }
+    }
 }

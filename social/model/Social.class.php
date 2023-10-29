@@ -66,6 +66,17 @@ class Social {
         return $reply;
     }
 
+    public function getPostFromId($id) {
+        global $conn;
+
+        $query = "SELECT id, post, data FROM $this->table WHERE id = $id";
+        $result = mysqli_query($conn, $query);
+
+        if ($result->num_rows === 1) {
+            return $result->fetch_assoc();
+        }
+    }
+
     public function deleteById($idPost, $isReply = false) {
         global $conn;
 
@@ -73,6 +84,20 @@ class Social {
         $query = "DELETE FROM {$this->table} WHERE $field = $idPost";
         
         return mysqli_query($conn, $query);
-    } 
+    }
+
+    public function updatePostFromId($post) {
+        global $conn;
+        
+        $postId = $post['id'];
+        $newPost = mysqli_real_escape_string($conn, $post['post']);
+        $newData = mysqli_real_escape_string($conn, $post['data']); // Assicurati di utilizzare mysqli_real_escape_string per prevenire SQL injection
+    
+        $query = "UPDATE $this->table SET post = '$newPost', data = '$newData' WHERE id = $postId";
+        $result = mysqli_query($conn, $query);
+    
+        return $result;
+    }
+    
 }
 ?>

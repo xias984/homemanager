@@ -1,3 +1,6 @@
+<?php
+global $colors;
+?>
 <div class="position-sticky">
     Ciao <a href="#" data-toggle="collapse" data-target="#logout"><strong><?= $_SESSION['name'] ?></strong></a>
     <ul class="flex-column ml-3 collapse" id="logout" style="list-style: none; background-color:<?=$colors['sfondo2']?>">

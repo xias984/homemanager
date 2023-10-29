@@ -173,21 +173,11 @@ class AuthController {
 
     public function editUser($userPost) {
         if (!empty($this->userData['editid']) && isset($this->userData['editid'])) {
-            $isAdminPresent = $this->user->getUsers(1); // Verifica se ci sono altri utenti con il ruolo admin
-    
-            if (count($isAdminPresent) > 1) {
-                // Consentire l'aggiornamento di tutti i campi, inclusi "admin"
-                if ($this->user->updateUserById($this->userData['editid'], $userPost)) {
-                    $idmsg = 26; // Messaggio di successo
-                }
-            } else {
-                // Consentire l'aggiornamento di tutti i campi tranne "admin"
-                if ($this->user->updateUserById($this->userData['editid'], $userPost, 1)) {
-                    $idmsg = 27; // Messaggio di successo
-                }
+            $userPost[3] = !empty($userPost[3]) ? 1 : 0;
+            
+            if ($this->user->updateUserById($this->userData['editid'], $userPost)) {
+                header("Location: " . refreshPageWOmsg() . "&idmsg=26");
             }
         }
-    
-        header("Location: " . refreshPageWOmsg() . "&idmsg=" . $idmsg);
     }
 }
