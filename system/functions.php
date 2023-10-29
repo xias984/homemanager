@@ -53,6 +53,12 @@ function getPage()
             case 'configuration':
                 redirect('login', isAdmin() ? $page : 'dashboard');
                 break;
+            case 'newtransaction':
+                redirect('login', $page);
+                break;
+            case 'financecategory':
+                redirect('login', isAdmin() ? $page : 'dashboard');
+                break;
             default:
                 require_once("frontend/pages/404.php");
         }

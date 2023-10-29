@@ -138,5 +138,20 @@
         "id": 28,
         "message": "Post modificato con successo",
         "style": "success"
+    },
+    {
+        "id": 29,
+        "message": "Categoria per Finance Manager creato con successo",
+        "style": "success"
+    },
+    {
+        "id": 30,
+        "message": "Categoria per Finance Manager rimossa",
+        "style": "primary"
+    },
+    {
+        "id": 31,
+        "message": "Categoria per Finance Manager modificata con successo",
+        "style": "success"
     }
 ]

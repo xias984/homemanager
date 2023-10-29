@@ -1,6 +1,5 @@
 <?php
 global $colors;
-global $conn;
 ?>
 <div class="row">
     <nav class="col-md-12 d-md-block sidebar rounded" style="background-color: <?=$colors['sfondo']?>">
@@ -20,8 +19,13 @@ global $conn;
                     </a>
                     <ul class="nav flex-column ml-3 collapse" id="finance">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Registra importo</a>
+                            <a class="nav-link" href="index.php?page=newtransaction">Registra importo</a>
                         </li>
+                        <?php if (isAdmin()): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?page=financecategory">Categorie</a>
+                        </li>
+                        <?php endif; ?>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Prospetto</a>
                         </li>
