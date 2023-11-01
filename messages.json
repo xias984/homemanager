@@ -83,5 +83,75 @@
         "id": 17,
         "message": "Informazioni salvate correttamente",
         "style": "success"
+    },
+    {
+        "id": 18,
+        "message": "Post inserito con successo",
+        "style": "success"
+    },
+    {
+        "id": 19,
+        "message": "Errore inserimento nuovo post",
+        "style": "danger"
+    },
+    {
+        "id": 20,
+        "message": "Risposta inserita con successo",
+        "style": "success"
+    },
+    {
+        "id": 21,
+        "message": "Errore inserimento nuova risposta",
+        "style": "danger"
+    },
+    {
+        "id": 22,
+        "message": "Risposta cancellata",
+        "style": "primary"
+    },
+    {
+        "id": 23,
+        "message": "Post cancellato",
+        "style": "primary"
+    },
+    {
+        "id": 24,
+        "message": "Utente cancellato con successo",
+        "style": "primary"
+    },
+    {
+        "id": 25,
+        "message": "Errore cancellazione utente",
+        "style": "danger"
+    },
+    {
+        "id": 26,
+        "message": "Informazioni utente aggiornate con successo",
+        "style": "success"
+    },
+    {
+        "id": 27,
+        "message": "Campo Admin obbligatorio",
+        "style": "danger"
+    },
+    {
+        "id": 28,
+        "message": "Post modificato con successo",
+        "style": "success"
+    },
+    {
+        "id": 29,
+        "message": "Categoria per Finance Manager creato con successo",
+        "style": "success"
+    },
+    {
+        "id": 30,
+        "message": "Categoria per Finance Manager rimossa",
+        "style": "primary"
+    },
+    {
+        "id": 31,
+        "message": "Categoria per Finance Manager modificata con successo",
+        "style": "success"
     }
 ]

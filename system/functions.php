@@ -42,7 +42,7 @@ function getPage()
                 redirect($page);
                 break;
             case 'dashboard':
-                redirect($page);
+                redirect('login', $page);
                 break;
             case 'settings':
                 redirect('login', $page);
@@ -51,6 +51,12 @@ function getPage()
                 redirect('login', isAdmin() ? $page : 'dashboard');
                 break;
             case 'configuration':
+                redirect('login', isAdmin() ? $page : 'dashboard');
+                break;
+            case 'newtransaction':
+                redirect('login', $page);
+                break;
+            case 'financecategory':
                 redirect('login', isAdmin() ? $page : 'dashboard');
                 break;
             default:
@@ -90,7 +96,7 @@ function getSidebar()
 function refreshPageWOmsg($url = null)
 {
     $url = $url ?: $_SERVER['REQUEST_URI'];
-    return preg_replace('/&?idmsg=\d+/', '', $url);
+    return preg_replace('/&.*$/', '', $url);
 }
 
 function ensureEnvFileExists() {

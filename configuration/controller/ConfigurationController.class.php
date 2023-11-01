@@ -14,7 +14,19 @@ class ConfigurationController
     }
 
     public function selectThemeFromConfiguration($id_color) {
-        return $this->colors->getColorsFromConfiguration($id_color);
+        $colors = $this->colors->getColorsFromConfiguration($id_color);
+        
+        if ($colors) {
+            $colori = explode(',',$colors['palette']);
+            $color['sfondo']     = $colori[0];
+            $color['sfondo2']    = $colori[1];
+            $color['principale'] = $colori[2];
+            $color['subtitle']   = $colori[3];
+            $color['secondario'] = $colori[4];
+            $color['link']       = $colori[5];
+        }
+
+        return $color;
     }
 
     public function viewThemePicker() {

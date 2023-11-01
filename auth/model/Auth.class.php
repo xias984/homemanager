@@ -51,6 +51,18 @@ class Auth {
         }
     }
 
+    public function getInfoUserById($id) {
+        global $conn;
+
+        $query = "SELECT firstname, familyname, email, admin FROM $this->table WHERE id = ".$id;
+        $result = mysqli_query($conn, $query);
+
+        if ($result->num_rows === 1) {
+            $userInfo = $result->fetch_assoc();
+            return $userInfo;
+        }
+    }
+
     public function getInfoUserByEmail($email) {
         global $conn;
 
@@ -81,4 +93,41 @@ class Auth {
             return $result->fetch_assoc();
         }
     }
+
+    public function getUsers($wheAdmin = null) {
+        global $conn;
+
+        $where = !empty($wheAdmin) ? ' WHERE admin = 1' : '';
+
+        $query = "SELECT id, firstname, familyname, email, admin FROM $this->table$where";
+        $result = mysqli_query($conn, $query);
+
+        $users = array();
+
+        if ($result->num_rows > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $users[] = $row;    
+            }
+            $row = mysqli_fetch_assoc($result);
+        }
+
+        return $users;
+    }
+
+    public function deleteUserById($id) {
+        global $conn;
+
+        $query = "DELETE FROM $this->table WHERE id = $id";
+
+        return mysqli_query($conn, $query);
+    }
+
+    public function updateUserById($id, $userData) {
+        global $conn;
+
+        $query = "UPDATE $this->table SET firstname = '$userData[0]', familyname = '$userData[1]', email = '$userData[2]', admin = $userData[3] WHERE id = $id";
+    
+        return mysqli_query($conn, $query);
+    }
+    
 }

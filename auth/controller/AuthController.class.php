@@ -5,7 +5,7 @@ class AuthController {
     private $userData;
     private $user;
 
-    public function __construct($userData) {
+    public function __construct($userData = null) {
         $this->userData = $userData;
         $this->user = new Auth();
     }
@@ -26,6 +26,9 @@ class AuthController {
         $consent = false;
         
         if (!empty($this->userData) && $this->validateData()) {
+            // Controllo se ci sono utenti admin, se non ci sono procedo con la registrazione come utente admin
+            $admin = $this->user->getUsers(1) ? 0 : 1;
+
             // Controllo se le password coincidono
             if (!empty($this->userData['password']) && !empty($this->userData['password2'])) {
                 if ($this->userData['password'] == $this->userData['password2']) {
@@ -45,16 +48,13 @@ class AuthController {
                 $consent = true;
             }
             
-            // Assegno valore booleano al campo admin access
-            $this->userData['admin'] = (!empty($this->userData['admin']) && $this->userData['admin'] == 'on') ? 1 : 0;
-            
             if ($consent) {
                 $result = $this->user->createUser(
                     ucfirst($this->userData['firstname']), 
                     ucfirst($this->userData['familyname']), 
                     $this->userData['email'], 
                     trim($this->userData['password']), 
-                    $this->userData['admin']
+                    $admin
                 );
 
                 if ($result) {
@@ -133,6 +133,51 @@ class AuthController {
             }
         } else {
             header("Location: " .refreshPageWOmsg(). "&idmsg=12");
+        }
+    }
+
+    public function listUserTable() {
+        $configTable = new ConfigurationController();
+        $userList = array(
+            array('Nome', 'Cognome', 'Email', 'Admin', 'Actions') // Intestazione
+        );
+        
+        $userArray = array();
+        if ($this->user->getUsers()) {
+            $usersData = $this->user->getUsers();
+            foreach ($usersData as $userData) {
+                $userArray[] = [ 
+                    ucfirst($userData['firstname']), 
+                    ucfirst($userData['familyname']), 
+                    strtolower($userData['email']), 
+                    $userData['admin'],
+                    $userData['id']
+                ];
+            }
+            $userList = array_merge($userList, $userArray);
+        }
+    
+        return $userList;
+    }
+
+    public function removeUser() {
+        if (!empty($this->userData['deleteid']) && isset($this->userData['deleteid'])) {
+            if ($this->user->deleteUserById($this->userData['deleteid'])) {
+                $idmsg = 24;
+            } else {
+                $idmsg = 25;
+            }
+            header("Location: " . refreshPageWOmsg() . "&idmsg=" . $idmsg);
+        }
+    }
+
+    public function editUser($userPost) {
+        if (!empty($this->userData['editid']) && isset($this->userData['editid'])) {
+            $userPost[3] = !empty($userPost[3]) ? 1 : 0;
+            
+            if ($this->user->updateUserById($this->userData['editid'], $userPost)) {
+                header("Location: " . refreshPageWOmsg() . "&idmsg=26");
+            }
         }
     }
 }
