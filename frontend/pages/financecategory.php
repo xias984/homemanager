@@ -39,7 +39,7 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
 
 <div class="row">
     <div class="col-md-2"></div>
-    <div class="col-md-8">
+    <div class="col-md-8" style="overflow-x: auto;">
         <table class="table responsive" style="text-align:center">
             <thead>
                 <tr>

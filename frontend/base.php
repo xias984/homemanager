@@ -149,13 +149,14 @@
         </div>
         <hr>
         <div class="row fixed-top-alert">
-            <div class="col-md-12">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
                 <?php 
                 if (isset($_GET['idmsg']) && !empty($_GET['idmsg'])){
                     foreach ($messages as $message) {
                         if ($message['id'] == $_GET['idmsg']) {
                             ?>
-                <div id="alert" class="alert alert-<?=$message['style']?>" role="alert">
+                <div id="alert" class="alert alert-<?=$message['style']?>" role="alert" style="text-align:center">
                     <strong><?=$message['message']?></strong>
                 </div>
                 <?php
@@ -164,6 +165,7 @@
                 }
                 ?>
             </div>
+            <div class="col-md-4"></div>
         </div>
         <div class="row">
             <div class="col-md-9 p-2">

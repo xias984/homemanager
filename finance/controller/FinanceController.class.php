@@ -74,5 +74,33 @@ class FinanceController
             }
         }
     }
+
+    public function selectCategories() {
+        $categoriesArray = array();
+
+        foreach ($this->category->getCategory() as $value) {
+            $categoriesArray[] = array(
+                "id" => $value['id'],
+                "category" => $value['category']
+            );
+        }
+        return $categoriesArray;
+    }
+
+    public function registerAmount($amountData) {
+        dump($amountData);
+        /*
+        if (!empty($category)) {
+            $categoryArray = array(
+                "category"  => ucfirst($category),
+                "iduser"    => $this->iduser,
+                "date"      => $this->datetime
+            );
+
+            $this->category->createCategory($categoryArray);
+
+            header("Location: " . refreshPageWOmsg() . "&idmsg=29");
+         */
+    }
 }
 ?>

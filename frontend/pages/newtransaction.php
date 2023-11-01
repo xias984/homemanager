@@ -1,3 +1,14 @@
+<?php
+require("./finance/controller/FinanceController.class.php");
+
+$finance = new FinanceController();
+$categories = $finance->selectCategories();
+
+if (!empty($_POST)) {
+    $finance->registerAmount($_POST);
+}
+?>
+
 <div class="title">
     <h3>Registra Transazione</h3>
 </div>
@@ -6,6 +17,7 @@
     </div>
     <div class="col-md-6">
         <form action="" method="post">
+            <input type="hidden" name="iduser" value="<?=$_SESSION['iduser']?>">
             <div class="form-group">
                 <label for="typeamount">Tipo importo:</label>
                 <select class="form-control" name="typeamount" style="flex:1;">
@@ -24,11 +36,9 @@
             <div class="form-group">
                 <label for="categoryid">Categoria:</label>
                 <select class="form-control" name="categoryid" style="flex:1;">
-                    <option value="1">Casa</option>
-                    <option value="2">Famiglia</option>
-                    <option value="3">Bolletta</option>
-                    <option value="4">Risparmi</option>
-                    <option value="5">Macchina</option>
+                    <?php foreach($categories as $category) { dump($category);?>
+                    <option value="<?=$category['id']?>"><?=$category['category']?></option>
+                    <?php } ?>
                 </select>
             </div>
             <div class="form-group">
