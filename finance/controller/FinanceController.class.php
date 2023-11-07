@@ -1,6 +1,7 @@
 <?php
 require("./finance/model/Category.class.php");
 require("./auth/model/Auth.class.php");
+require("./finance/model/Finance.class.php");
 
 class FinanceController
 {
@@ -8,6 +9,7 @@ class FinanceController
         $this->iduser = $_SESSION['iduser'];
         $this->datetime = date('Y-m-d H:i:s');
         $this->category = new Category();
+        $this->finance = new Finance();
         $this->user = new Auth();
     }
 
@@ -88,19 +90,20 @@ class FinanceController
     }
 
     public function registerAmount($amountData) {
-        dump($amountData);
-        /*
-        if (!empty($category)) {
-            $categoryArray = array(
-                "category"  => ucfirst($category),
-                "iduser"    => $this->iduser,
-                "date"      => $this->datetime
+        if (!empty($amountData)) {
+            $amountArray = array(
+                "iduser" => $amountData['iduser'],
+                "typeamount" => $amountData['typeamount'],
+                "amount" => $amountData['amount'],
+                "description" => $amountData['description'],
+                "categoryid" => $amountData['categoryid'],
+                "paymentdate" => $amountData['paymentdate']
             );
 
-            $this->category->createCategory($categoryArray);
+            $this->finance->createTransaction($amountArray);
 
-            header("Location: " . refreshPageWOmsg() . "&idmsg=29");
-         */
+            header("Location: " . refreshPageWOmsg() . "&idmsg=32");
+        }
     }
 }
 ?>

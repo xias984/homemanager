@@ -27,7 +27,7 @@ global $colors;
                         </li>
                         <?php endif; ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Prospetto</a>
+                            <a class="nav-link" href="index.php?page=financeprospect">Prospetto</a>
                         </li>
                     </ul>
                 </li>

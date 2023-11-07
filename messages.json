@@ -153,5 +153,10 @@
         "id": 31,
         "message": "Categoria per Finance Manager modificata con successo",
         "style": "success"
+    },
+    {
+        "id": 32,
+        "message": "Transazione creata con successo",
+        "style": "success"
     }
 ]

@@ -27,7 +27,7 @@ if (!empty($_POST)) {
             </div>
             <div class="form-group">
                 <label for="amount">Importo:</label>
-                <input type="number" class="form-control" name="amount" required>
+                <input type="number" class="form-control" name="amount" placeholder="0" required>
             </div>
             <div class="form-group">
                 <label for="description">Descrizione:</label>

@@ -59,6 +59,9 @@ function getPage()
             case 'financecategory':
                 redirect('login', isAdmin() ? $page : 'dashboard');
                 break;
+            case 'financeprospect':
+                redirect('login', $page);
+                break;
             default:
                 require_once("frontend/pages/404.php");
         }
