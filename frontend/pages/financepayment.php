@@ -1,23 +1,5 @@
-<?php
-require("./finance/controller/FinanceController.class.php");
-
-$category = new FinanceController();
-$categoryData = $category->listCategoryTable();
-
-if (!empty($_POST['category'])) {
-    $category->registerCategory($_POST['category']);
-}
-
-if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
-    $category->removeCategory($_GET['deleteid']);
-} else if (!empty($_GET['editid'])) {
-    if (!empty($_POST) && isset($_POST)) {
-        $category->editCategory($_GET['editid'], $_POST);
-    }
-}
-?>
 <div class="title">
-    <h3>Categorie spese/entrate</h3>
+    <h3>Metodi di pagamento</h3>
 </div>
 
 <form action="" method="post">
@@ -26,7 +8,7 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <input type="text" name="category" class="form-control" placeholder="Aggiungi categoria" required>
+                <input type="text" name="category" class="form-control" placeholder="Aggiungi metodo di pagamento" required>
             </div>
         </div>
         <div class="col-md-3">

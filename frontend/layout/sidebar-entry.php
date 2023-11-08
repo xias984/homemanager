@@ -25,9 +25,12 @@ global $colors;
                         <li class="nav-item">
                             <a class="nav-link" href="index.php?page=financecategory">Categorie</a>
                         </li>
+                        <li>
+                            <a class="nav-link" href="index.php?page=financepayment">Metodi di pagamento</a>
+                        </li>
                         <?php endif; ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Prospetto</a>
+                            <a class="nav-link" href="index.php?page=financeprospect">Prospetto</a>
                         </li>
                     </ul>
                 </li>

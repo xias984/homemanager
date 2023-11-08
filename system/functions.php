@@ -32,30 +32,20 @@ function getPage()
                 session_destroy();
                 header("Location: index.php?page=login&idmsg=3");
                 break;
-            case 'login':
-                redirect($page);
-                break;
             case 'register':
-                redirect($page);
-                break;
+            case 'login':
             case 'forgot':
                 redirect($page);
                 break;
             case 'dashboard':
-                redirect('login', $page);
-                break;
             case 'settings':
+            case 'newtransaction':
+            case 'financeprospect':
+            case 'financepayment':
                 redirect('login', $page);
                 break;
             case 'listusers':
-                redirect('login', isAdmin() ? $page : 'dashboard');
-                break;
             case 'configuration':
-                redirect('login', isAdmin() ? $page : 'dashboard');
-                break;
-            case 'newtransaction':
-                redirect('login', $page);
-                break;
             case 'financecategory':
                 redirect('login', isAdmin() ? $page : 'dashboard');
                 break;
@@ -93,7 +83,7 @@ function getSidebar()
     }
 }
 
-function refreshPageWOmsg($url = null)
+function refreshPage($url = null)
 {
     $url = $url ?: $_SERVER['REQUEST_URI'];
     return preg_replace('/&.*$/', '', $url);

@@ -35,14 +35,14 @@ class AuthController {
                     $this->userData['password'] = password_hash($this->userData['password'], PASSWORD_DEFAULT);
                     $consent = true;
                 } else {
-                    header("Location: " .refreshPageWOmsg(). "&idmsg=4");
+                    header("Location: " .refreshPage(). "&idmsg=4");
                     $consent = false;
                 }
             }
 
             // Controllo se l'email è già presente a sistema
             if (!empty($this->userData['email']) && $this->user->checkEmailIfExist($this->userData['email'])) {
-                header("Location: " .refreshPageWOmsg(). "&idmsg=5");
+                header("Location: " .refreshPage(). "&idmsg=5");
                 $consent = false;
             } else {
                 $consent = true;
@@ -83,7 +83,7 @@ class AuthController {
                     $_SESSION['isAdmin'] = $sessionName['admin'] ?? true;
                     header("Location: index.php?page=dashboard&idmsg=1");
                 } else {
-                    header("Location: " .refreshPageWOmsg(). "&idmsg=8");
+                    header("Location: " .refreshPage(). "&idmsg=8");
                 }
             } else {
                 header("Location: index.php?idmsg=7");
@@ -99,9 +99,9 @@ class AuthController {
         if (!empty($_POST['email']) && isset($_POST['email'])) {
             $userId = $this->user->getInfoUserByEmail($_POST['email'])['id'];
             if ($this->user->updatePasswordById($userId, $hashedPassword)) {
-                header("Location: " .refreshPageWOmsg() . "&idmsg=10");
+                header("Location: " .refreshPage() . "&idmsg=10");
             } else {
-                header("Location: " .refreshPageWOmsg() . "&idmsg=11");
+                header("Location: " .refreshPage() . "&idmsg=11");
             }
         }
 
@@ -125,14 +125,14 @@ class AuthController {
                 if ($this->userData['newpassword'] == $this->userData['newpassword2']) {
                     $this->userData['newpassword'] = password_hash($this->userData['newpassword'], PASSWORD_DEFAULT);
                     $this->user->updatePasswordById($_SESSION['iduser'], $this->userData['newpassword']);
-                    header("Location: " . refreshPageWOmsg(). "&idmsg=13");
+                    header("Location: " . refreshPage(). "&idmsg=13");
                 } else {
-                    header("Location: " .refreshPageWOmsg(). "&idmsg=4");
+                    header("Location: " .refreshPage(). "&idmsg=4");
                     return false;
                 }
             }
         } else {
-            header("Location: " .refreshPageWOmsg(). "&idmsg=12");
+            header("Location: " .refreshPage(). "&idmsg=12");
         }
     }
 
@@ -167,7 +167,7 @@ class AuthController {
             } else {
                 $idmsg = 25;
             }
-            header("Location: " . refreshPageWOmsg() . "&idmsg=" . $idmsg);
+            header("Location: " . refreshPage() . "&idmsg=" . $idmsg);
         }
     }
 
@@ -176,7 +176,7 @@ class AuthController {
             $userPost[3] = !empty($userPost[3]) ? 1 : 0;
             
             if ($this->user->updateUserById($this->userData['editid'], $userPost)) {
-                header("Location: " . refreshPageWOmsg() . "&idmsg=26");
+                header("Location: " . refreshPage() . "&idmsg=26");
             }
         }
     }
