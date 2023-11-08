@@ -92,10 +92,10 @@ class ConfigurationController
         }
 
         if ($validate) {
-            header("Location: " . refreshPageWOmsg() . "&idmsg=17");
+            header("Location: " . refreshPage() . "&idmsg=17");
             return true;
         } else {
-            header("Location: " . refreshPageWOmsg() . "&" . $idmsg);
+            header("Location: " . refreshPage() . "&" . $idmsg);
             return false;
         }
     }

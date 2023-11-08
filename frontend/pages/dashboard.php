@@ -75,7 +75,7 @@ if (!empty($_GET['editpost']) && isset($_GET['editpost'])) {
                     <?php if (($post['iduser'] === $_SESSION['iduser']) || isAdmin()): ?>
                     <?php if (!empty($_GET['editpost']) && ($post['id'] == $_GET['editpost'])) { 
                         echo '<a href="#" onclick="document.getElementById(\'editpost\').submit();">Conferma</a><br>
-                            <a href="'.refreshPageWOmsg().'">Chiudi</a>';
+                            <a href="'.refreshPage().'">Chiudi</a>';
                      } else { ?>
                     <br><a href="index.php?page=dashboard&editpost=<?=$post['id']?>">Modifica</a>
                     <br><a href="index.php?page=dashboard&deletepost=<?=$post['idreply']?>">Cancella</a>
@@ -128,7 +128,7 @@ if (!empty($_GET['editpost']) && isset($_GET['editpost'])) {
                 <?php if (($reply['iduser'] === $_SESSION['iduser']) || isAdmin()):?>
                     <?php if (!empty($_GET['editpost']) && ($reply['id'] == $_GET['editpost'])) {
                         echo '<a href="#" onclick="document.getElementById(\'editpost\').submit();">Conferma</a><br>
-                            <a href="'.refreshPageWOmsg().'">Chiudi</a>';
+                            <a href="'.refreshPage().'">Chiudi</a>';
                     } else {?>
                     <a href="index.php?page=dashboard&editpost=<?=$reply['id']?>">Modifica</a><br>
                     <a href="index.php?page=dashboard&deletereply=<?=$reply['id']?>">Cancella</a>

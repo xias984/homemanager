@@ -50,7 +50,7 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
                         } elseif ($key === 4) {
                             if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $user[4]) {
                                 echo '<a href="#" onclick="document.getElementById(\'edituser\').submit();">Conferma</a> - ' .
-                                    '<a href="'.refreshPageWOmsg().'">Chiudi</a>';
+                                    '<a href="'.refreshPage().'">Chiudi</a>';
                             } else {
                                 echo '<a href="index.php?page=listusers&editid=' . $value . '">Modifica</a> - ' .
                                     '<a href="index.php?page=listusers&deleteid=' . $value . '">Cancella</a>';

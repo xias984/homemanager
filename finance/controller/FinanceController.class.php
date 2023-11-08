@@ -23,7 +23,7 @@ class FinanceController
 
             $this->category->createCategory($categoryArray);
 
-            header("Location: " . refreshPageWOmsg() . "&idmsg=29");
+            header("Location: " . refreshPage() . "&idmsg=29");
         }
     }
 
@@ -53,7 +53,7 @@ class FinanceController
     public function removeCategory($categoryId) {
         if (!empty($categoryId) && isset($categoryId)) {
             if ($this->category->deleteCategoryById($categoryId)) {
-                header("Location: " . refreshPageWOmsg() . "&idmsg=30");
+                header("Location: " . refreshPage() . "&idmsg=30");
             }
         }
     }
@@ -72,7 +72,7 @@ class FinanceController
             );
 
             if ($this->category->updateCategoryById($categoryArray)) {
-                header("Location: " . refreshPageWOmsg() . "&idmsg=31");
+                header("Location: " . refreshPage() . "&idmsg=31");
             }
         }
     }
@@ -102,7 +102,7 @@ class FinanceController
 
             $this->finance->createTransaction($amountArray);
 
-            header("Location: " . refreshPageWOmsg() . "&idmsg=32");
+            header("Location: " . refreshPage() . "&idmsg=32");
         }
     }
 }

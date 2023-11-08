@@ -23,9 +23,9 @@ class SocialController
         }
         
         if ($response) {
-            header("Location: " . refreshPageWOmsg() . "&idmsg=" . ($replyType === 'R' ? 20 : 18));
+            header("Location: " . refreshPage() . "&idmsg=" . ($replyType === 'R' ? 20 : 18));
         } else {
-            header("Location: " . refreshPageWOmsg() . "&idmsg=" . ($replyType === 'R' ? 21 : 19));
+            header("Location: " . refreshPage() . "&idmsg=" . ($replyType === 'R' ? 21 : 19));
         }
     }
     
@@ -84,7 +84,7 @@ class SocialController
     
         if ($idToDelete !== null) {
             if ($this->social->deleteById($idToDelete, $idReply)) {
-                header("Location: " . refreshPageWOmsg() . "&idmsg=" . $idmsg);
+                header("Location: " . refreshPage() . "&idmsg=" . $idmsg);
             }
         }
     }
@@ -100,7 +100,7 @@ class SocialController
                 );
     
                 $this->social->updatePostFromId($newPostArray);
-                header("Location: " . refreshPageWOmsg() . "&idmsg=28");
+                header("Location: " . refreshPage() . "&idmsg=28");
             }
         }
     }
