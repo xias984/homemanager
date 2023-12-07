@@ -158,5 +158,20 @@
         "id": 32,
         "message": "Transazione creata con successo",
         "style": "success"
+    },
+    {
+        "id": 33,
+        "message": "Metodo di pagamento per Finance Manager creato con successo",
+        "style": "success"
+    },
+    {
+        "id": 34,
+        "message": "Metodo di pagamento per Finance Manager rimossa",
+        "style": "primary"
+    },
+    {
+        "id": 35,
+        "message": "Metodo di pagamento per Finance Manager modificato con successo",
+        "style": "success"
     }
 ]

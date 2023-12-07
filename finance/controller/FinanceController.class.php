@@ -1,5 +1,6 @@
 <?php
 require("./finance/model/Category.class.php");
+require("./finance/model/PaymentType.class.php");
 require("./auth/model/Auth.class.php");
 require("./finance/model/Finance.class.php");
 
@@ -9,6 +10,7 @@ class FinanceController
         $this->iduser = $_SESSION['iduser'];
         $this->datetime = date('Y-m-d H:i:s');
         $this->category = new Category();
+        $this->paymentType = new PaymentType();
         $this->finance = new Finance();
         $this->user = new Auth();
     }
@@ -87,6 +89,70 @@ class FinanceController
             );
         }
         return $categoriesArray;
+    }
+
+    public function registerPaymentType($paymentType) {
+        if (!empty($paymentType)) {
+            $paymentTypeArray = array(
+                "paymenttype"  => strtoupper($paymentType),
+                "iduser"    => $this->iduser,
+                "date"      => $this->datetime
+            );
+
+            $this->paymentType->createPaymentType($paymentTypeArray);
+
+            header("Location: " . refreshPage() . "&idmsg=33");
+        }
+    }
+
+    public function listPaymentTypeTable() {
+        $paymentTypeList = array(
+            array('Metodo di pagamento', 'Inserito da', 'Data inserimento', 'Actions') // Intestazione
+        );
+
+        $paymentTypeArray = array();
+
+        if ($this->paymentType->getPaymentTypes()) {
+            $paymentTypeData = $this->paymentType->getPaymentTypes();
+            foreach ($paymentTypeData as $paymentType) {
+                $paymentTypeArray[] = [
+                    $paymentType['paymenttype'],
+                    ucfirst($this->user->getInfoUserById($paymentType['iduser'])['firstname']),
+                    date('d/m/Y', strtotime($paymentType['datainserimento'])),
+                    $paymentType['id']
+                ];
+            }
+        }
+        $paymentTypeArray = array_merge($paymentTypeList, $paymentTypeArray);
+
+        return $paymentTypeArray;
+    }
+
+    public function removePaymentType($paymentTypeId) {
+        if (!empty($paymentTypeId) && isset($paymentTypeId)) {
+            if ($this->paymentType->deletePaymentTypeById($paymentTypeId)) {
+                header("Location: " . refreshPage() . "&idmsg=34");
+            }
+        }
+    }
+
+    public function editPaymentType($paymentTypeId, $paymentTypePost) {
+        $paymentTypeArray = array();
+
+        if (!empty($paymentTypeId)) {
+            $paymentTypeData = $this->paymentType->getPaymentTypeById($paymentTypeId);
+
+            $paymentTypeArray = array(
+                "id"            =>  $paymentTypeData['id'],
+                "paymenttype"   =>  strtoupper($paymentTypePost[0]),
+                "userid"        =>  $this->iduser,
+                "datamodifica"  =>  $this->datetime
+            );
+            
+            if ($this->paymentType->updatePaymentTypeById($paymentTypeArray)) {
+                header("Location: " . refreshPage() . "&idmsg=31");
+            }
+        }
     }
 
     public function registerAmount($amountData) {

@@ -13,7 +13,6 @@ if ($row) {
 	$description 	= $row['description'];
 	$logo 			= $row['logo'];
 	$maintenance 	= $row['maintenance'];
-
 	$colors			= $config->selectThemeFromConfiguration($row['id_color']);
 }
 ?>

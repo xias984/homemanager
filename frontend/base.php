@@ -1,11 +1,3 @@
-<?php
-    global $messages;
-	global $title;
-	global $description;
-	global $logo;
-
-    $theme = new ConfigurationController();
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -74,17 +66,17 @@
 
     .message {
         font-weight: bold;
-        color: <?= $colors['link']?>;
+        color: <?=$colors['link']?>;
     }
 
     .answer {
         font-weight: bold;
-        color: <?= $colors['link']?>;
-        text-align:right;
+        color: <?=$colors['link']?>;
+        text-align: right;
     }
 
     .answer-text {
-        text-align:right;   
+        text-align: right;
     }
 
     .actions-column {
@@ -104,7 +96,7 @@
     }
 
     .title {
-        text-align:center;
+        text-align: center;
         margin-bottom: 20px;
     }
 
@@ -144,7 +136,7 @@
                 <h3><?= strtoUpper($description) ?></h3>
             </div>
             <div class="col-md-3">
-                <?php getMenu(); ?>
+                <?= getMenu()?>
             </div>
         </div>
         <hr>
@@ -169,12 +161,10 @@
         </div>
         <div class="row">
             <div class="col-md-9 p-2">
-                <?php getPage();?>
+                <?= getPage()?>
             </div>
             <div class="col-md-3 p-2">
-                <?php 
-                getSidebar(); 
-                ?>
+                <?= getSidebar()?>
             </div>
         </div>
     </div>
