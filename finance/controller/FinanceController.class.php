@@ -186,10 +186,10 @@ class FinanceController
         }
     }
 
-    public function selectFinances() {
+    public function selectFinances($filters = null) {
         $financesArray = array();
 
-        foreach ($this->finance->getTransactions() as $value) {
+        foreach ($this->finance->getTransactions($filters) as $value) {
             $financesArray[] = array(
                 "id" => $value['id'],
                 "user" => $this->user->getInfoUserById($value['userid'])['firstname'],
@@ -198,7 +198,8 @@ class FinanceController
                 "description" => $value['description'],
                 "category" => isset($value['categoryid']) ? ($this->category->getCategoryById($value['categoryid'])['category'] ?? 'ND') : 'ND',
                 "paymenttype" => isset($value['paymenttypeid']) ? ($this->paymentType->getPaymentTypeById($value['paymenttypeid'])['paymenttype'] ?? 'ND') : 'ND',
-                "paymentdate" => $value['paymentdate']
+                "paymentdate" => $value['paymentdate'],
+                "payed" => $value['payed']
             );
         }
         return $financesArray;

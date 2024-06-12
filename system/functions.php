@@ -3,6 +3,8 @@ session_start();
 $messages = file_get_contents('messages.json');
 $messages = json_decode($messages, true);
 
+
+
 function redirect($page, $dest = null) {
     // Se la variabile session è attiva su loggedIn redireziona sulla pagina richiesta oppure su dashboard
     if (!empty($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
@@ -122,4 +124,19 @@ function dd(...$params) {
     debugPrint(...$params);
     exit();
 }
+
+$monthsList = array(
+    '01' => 'Gennaio',
+    '02' => 'Febbraio',
+    '03' => 'Marzo',
+    '04' => 'Aprile',
+    '05' => 'Maggio',
+    '06' => 'Giugno',
+    '07' => 'Luglio',
+    '08' => 'Agosto',
+    '09' => 'Settembre',
+    '10' => 'Ottobre',
+    '11' => 'Novembre',
+    '12' => 'Dicembre'
+    );
 ?>
