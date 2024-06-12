@@ -3,7 +3,7 @@ require("./finance/controller/FinanceController.class.php");
 
 $finance = new FinanceController();
 $categories = $finance->selectCategories();
-
+$paymenttypes = $finance->selectPaymentTypes();
 if (!empty($_POST)) {
     $finance->registerAmount($_POST);
 }
@@ -27,7 +27,7 @@ if (!empty($_POST)) {
             </div>
             <div class="form-group">
                 <label for="amount">Importo:</label>
-                <input type="number" class="form-control" name="amount" placeholder="0" required>
+                <input type="number" class="form-control" name="amount" placeholder="0">
             </div>
             <div class="form-group">
                 <label for="description">Descrizione:</label>
@@ -36,8 +36,18 @@ if (!empty($_POST)) {
             <div class="form-group">
                 <label for="categoryid">Categoria:</label>
                 <select class="form-control" name="categoryid" style="flex:1;">
-                    <?php foreach($categories as $category) { dump($category);?>
+                    <option value="0">Seleziona...</option>
+                    <?php foreach($categories as $category) {?>
                     <option value="<?=$category['id']?>"><?=$category['category']?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="paymenttypeid">Modalita di pagamento:</label>
+                <select class="form-control" name="paymenttypeid" style="flex:1;">
+                    <option value="0">Seleziona...</option>
+                    <?php foreach($paymenttypes as $paymenttype) { ?>
+                    <option value="<?=$paymenttype['id']?>"><?=$paymenttype['paymenttype']?></option>
                     <?php } ?>
                 </select>
             </div>
@@ -45,7 +55,7 @@ if (!empty($_POST)) {
                 <label for="data">Data di pagamento:</label>
                 <input type="date" class="form-control" name="paymentdate">
             </div>
-            <button type="submit" class="btn btn-primary">Accedi</button>
+            <button type="submit" class="btn btn-warning">Inserisci</button>
         </form>
     </div>
     <div class="col-md-3">

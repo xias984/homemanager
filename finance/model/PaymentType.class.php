@@ -31,9 +31,8 @@ class PaymentType {
 
         if ($result->num_rows > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
-                $paymentTypes[] = $row;    
+                $paymentTypes[] = $row;
             }
-            $row = mysqli_fetch_assoc($result);
         }
 
         return $paymentTypes;

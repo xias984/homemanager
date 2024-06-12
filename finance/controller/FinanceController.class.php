@@ -105,6 +105,18 @@ class FinanceController
         }
     }
 
+    public function selectPaymentTypes() {
+        $categoriesArray = array();
+
+        foreach ($this->paymentType->getPaymentTypes() as $value) {
+            $categoriesArray[] = array(
+                "id" => $value['id'],
+                "paymenttype" => $value['paymenttype']
+            );
+        }
+        return $categoriesArray;
+    }
+
     public function listPaymentTypeTable() {
         $paymentTypeList = array(
             array('Metodo di pagamento', 'Inserito da', 'Data inserimento', 'Actions') // Intestazione
@@ -157,19 +169,39 @@ class FinanceController
 
     public function registerAmount($amountData) {
         if (!empty($amountData)) {
+            $now = date("Y-m-d H:i:s");
             $amountArray = array(
                 "iduser" => $amountData['iduser'],
                 "typeamount" => $amountData['typeamount'],
-                "amount" => $amountData['amount'],
+                "amount" => $amountData['amount'] ?: 0,
                 "description" => $amountData['description'],
                 "categoryid" => $amountData['categoryid'],
-                "paymentdate" => $amountData['paymentdate']
+                "paymenttypeid" => $amountData['paymenttypeid'],
+                "paymentdate" => $amountData['paymentdate'] ?: $now
             );
 
             $this->finance->createTransaction($amountArray);
 
             header("Location: " . refreshPage() . "&idmsg=32");
         }
+    }
+
+    public function selectFinances() {
+        $financesArray = array();
+
+        foreach ($this->finance->getTransactions() as $value) {
+            $financesArray[] = array(
+                "id" => $value['id'],
+                "user" => $this->user->getInfoUserById($value['userid'])['firstname'],
+                "type" => $value['type'],
+                "amount" => $value['amount'],
+                "description" => $value['description'],
+                "category" => isset($value['categoryid']) ? ($this->category->getCategoryById($value['categoryid'])['category'] ?? 'ND') : 'ND',
+                "paymenttype" => isset($value['paymenttypeid']) ? ($this->paymentType->getPaymentTypeById($value['paymenttypeid'])['paymenttype'] ?? 'ND') : 'ND',
+                "paymentdate" => $value['paymentdate']
+            );
+        }
+        return $financesArray;
     }
 }
 ?>
