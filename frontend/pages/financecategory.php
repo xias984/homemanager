@@ -16,9 +16,7 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
     }
 }
 ?>
-<div class="title">
-    <h3>Categorie spese/entrate</h3>
-</div>
+<?= Component::createTitle('Categorie spese/entrate') ?>
 
 <form action="" method="post">
     <div class="row">

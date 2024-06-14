@@ -16,9 +16,7 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
     }
 }
 ?>
-<div class="title">
-    <h3>Metodi di pagamento</h3>
-</div>
+<?= Component::createTitle('Metodi di pagamento') ?>
 
 <form action="" method="post">
     <div class="row">

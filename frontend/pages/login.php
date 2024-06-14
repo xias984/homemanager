@@ -9,9 +9,7 @@ require("./auth/controller/AuthController.class.php");
 $auth = new AuthController($_POST);
 $auth->login();
 ?>
-<div class="title">
-    <h3>Login</h3>
-</div>
+<?= Component::createTitle('Login') ?>
 <div class="row">
     <div class="col-md-3">
     </div>

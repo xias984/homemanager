@@ -6,9 +6,7 @@ if ((!empty($_POST) && isset($_POST)) || (!empty($_FILES['logo']) && isset($_FIL
 }
 
 ?>
-<div class="title">
-    <h3>Configurazione Sito</h3>
-</div>
+<?= Component::createTitle('Configurazione Sito') ?>
 <div>&nbsp;</div>
 <form class="row g-3" action="" method="post" enctype="multipart/form-data">
     <div class="row">

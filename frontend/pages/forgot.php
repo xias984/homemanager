@@ -3,9 +3,7 @@ require("./auth/controller/AuthController.class.php");
 $auth = new AuthController($_POST);
 $auth->resetPassword();
 ?>
-<div class="title">
-    <h3>Ricorda Password</h3>
-</div>
+<?= Component::createTitle('Ricorda Password') ?>
 <div class="row">
     <div class="col-md-3">
     </div>

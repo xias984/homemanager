@@ -5,9 +5,7 @@ if (!empty($_POST) && isset($_POST)) {
     $auth->verifyPasswordDB();
 }
 ?>
-<div class="title">
-    <h3>Modifica Password</h3>
-</div>
+<?= Component::createTitle('Modifica Password') ?>
 <div class="row">
     <div class="col-md-3">
     </div>

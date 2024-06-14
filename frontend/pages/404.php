@@ -1,1 +1,1 @@
-Pagina non trovata
+<?= Component::createTitle('404 Pagina non trovata') ?>

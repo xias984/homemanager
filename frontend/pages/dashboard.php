@@ -21,9 +21,7 @@ if (!empty($_GET['editpost']) && isset($_GET['editpost'])) {
 }
 
 ?>
-<div class="title">
-    <h3>Dashboard</h3>
-</div>
+<?= Component::createTitle('Dashboard') ?>
 <div class="row">
     <div class="col-md-12">
         <div class="chat-box p-3">

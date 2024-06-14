@@ -3,9 +3,7 @@ require("./auth/controller/AuthController.class.php");
 $auth = new AuthController($_POST);
 $auth->register();
 ?>
-<div class="title">
-    <h3>Registrazione</h3>
-</div>
+<?= Component::createTitle('Registrazione') ?>
 <div class="row">
     <div class="col-md-3">
     </div>

@@ -12,9 +12,7 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
 }
 
 ?>
-<div class="title">
-    <h3>Lista utenti</h3>
-</div>
+<?= Component::createTitle('Lista utenti') ?>
 <div class="row">
     <div class="col-md-12" style="overflow-x: auto;">
         <table class="table responsive">

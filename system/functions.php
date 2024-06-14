@@ -44,6 +44,7 @@ function getPage()
             case 'newtransaction':
             case 'financeprospect':
             case 'financepayment':
+            case 'analisipwb':
                 redirect('login', $page);
                 break;
             case 'listusers':
@@ -139,4 +140,29 @@ $monthsList = array(
     '11' => 'Novembre',
     '12' => 'Dicembre'
     );
+
+function fetchDataFromApi($url) {
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $response = curl_exec($ch);
+
+    if ($response === false) {
+        $error = curl_error($ch);
+        curl_close($ch);
+        return "cURL Error: $error";
+    }
+
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    if (json_last_error() === JSON_ERROR_NONE) {
+        return $data;
+    } else {
+        return "Error decoding JSON: " . json_last_error_msg();
+    }
+}
 ?>

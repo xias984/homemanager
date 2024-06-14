@@ -2,7 +2,6 @@
 require("./finance/controller/FinanceController.class.php");
 global $monthsList;
 global $colors;
-
 if (isset($_POST['reset'])) {
     $_POST = array();
 }
@@ -23,9 +22,7 @@ foreach ($financesArray as $value) {
     $amountTot[$value['type']] += $value['amount'];
 }
 ?>
-<div class="title">
-    <h3>Prospetto Entrate/Uscite</h3>
-</div>
+<?= Component::createTitle('Prospetto Entrate/Uscite') ?>
 <div class="row">
     <div class="col-md-12" style="text-align:center">
         <h5>Filtri ricerca</h5>
@@ -105,7 +102,7 @@ foreach ($financesArray as $value) {
     </div>
 </div>
 <div>&nbsp;</div>
-<div class="col-md-12" style="text-align:center">
+<div class="col-md-12" style="text-align:center; overflow-x: auto;">
     <table class="table responsive">
         <thead>
             <tr>
@@ -125,7 +122,10 @@ foreach ($financesArray as $value) {
                 <td><?= $financeValue['paymenttype'] ?></td>
                 <td style="color:<?= $financeValue['type'] == 'U' ? 'red' : 'green' ?>; text-align:right"><strong><?= $financeValue['amount'] ?> €</strong></td>
                 <td><?= $financeValue['description'] ?></td>
-                <td><a href="#">Modifica</a> - <a href="#">Cancella</a></td>
+                <td>
+                    <a href="index.php?page=financeprospect&edittransaction=<?=$financeValue['id']?>">Modifica</a> - 
+                    <a href="index.php?page=financeprospect&deletetransaction=<?=$financeValue['id']?>">Cancella</a>
+                </td>
             </tr>
             <?php } ?>
         </tbody>

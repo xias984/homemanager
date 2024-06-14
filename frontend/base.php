@@ -127,7 +127,7 @@ ob_start();
 </head>
 
 <body>
-    <div class="container p-5">
+    <div class="container p-1 p-md-5">
         <div class="row">
             <div class="col-md-2" style="text-align:center">
                 <?php if (!empty($logo)) { ?>

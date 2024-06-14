@@ -60,6 +60,16 @@ global $colors;
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#pwb">
+                        <h5>PriceWatcherBot</h5>
+                    </a>
+                    <ul class="nav flex-column ml-3 collapse" id="pwb">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?page=analisipwb">Lista prodotti</a>
+                        </li>
+                    </ul>
+                </li>
                 <?php if (isAdmin()): ?>
                 <li class="nav-item">
                     <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#admin">

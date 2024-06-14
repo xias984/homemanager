@@ -8,10 +8,7 @@ if (!empty($_POST)) {
     $finance->registerAmount($_POST);
 }
 ?>
-
-<div class="title">
-    <h3>Registra Transazione</h3>
-</div>
+<?= Component::createTitle('Registra Transazione') ?>
 <div class="row">
     <div class="col-md-3">
     </div>
