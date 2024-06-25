@@ -172,6 +172,7 @@ class AuthController {
     }
 
     public function editUser($userPost) {
+        dump($userPost);
         if (!empty($this->userData['editid']) && isset($this->userData['editid'])) {
             $userPost[3] = !empty($userPost[3]) ? 1 : 0;
             

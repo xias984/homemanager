@@ -15,15 +15,9 @@ $auth->login();
     </div>
     <div class="col-md-6">
         <form action="" method="post">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Inserisci la tua email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Inserisci la tua password" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Accedi</button>
+            <?= Component::createInputText('email', 'Email', '', 'Inserisci la tua email', true) ?>
+            <?= Component::createInputText('password', 'Password', '', 'Inserisci la tua password', true, 'password') ?>
+            <?= Component::createSubmitButton('Accedi', 'primary') ?>
         </form>
         <a href="index.php?page=forgot">Password dimenticata?</a>   
     </div>

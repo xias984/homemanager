@@ -23,13 +23,10 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
         <div class="col-md-3">
         </div>
         <div class="col-md-6">
-            <div class="form-group">
-                <input type="text" name="paymenttype" class="form-control" placeholder="Aggiungi metodo di pagamento"
-                    required>
-            </div>
+            <?= Component::createInputText('paymenttype', '', '', 'Aggiungi metodo di pagamento', true) ?>
         </div>
         <div class="col-md-3">
-            <button type="submit" class="btn btn-primary">Inserisci</button>
+            <?= Component::createSubmitButton('Inserisci', 'primary') ?>
         </div>
     </div>
 </form>

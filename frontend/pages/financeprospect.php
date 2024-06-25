@@ -21,18 +21,22 @@ $amountTot = [
 foreach ($financesArray as $value) {
     $amountTot[$value['type']] += $value['amount'];
 }
+if (isset($_GET['edittransaction'])) {
+    $editTransaction = $finances->editTransaction($_GET['edittransaction']);
+}
+if (isset($_GET['payid']) && !empty($_GET['payid'])) {
+    $finances->payTransaction($_GET['payid']);
+}
 ?>
 <?= Component::createTitle('Prospetto Entrate/Uscite') ?>
 <div class="row">
     <div class="col-md-12" style="text-align:center">
         <h5>Filtri ricerca</h5>
-        <form action="" method="post">
+        <form action="" method="post" id="filterform">
         <div class="chat-box p-3">
             <div class="row">
                 <div class="col-md-10">
-                    <div class="form-group">
-                        <input class="form-control" type="textbox" name="searchbox" placeholder="<?= isset($_POST['searchbox']) && !empty($_POST['searchbox']) ? $_POST['searchbox'] : 'Cerca nelle note...'?>">
-                    </div>
+                    <?= Component::createInputText('searchbox', '', '', isset($_POST['searchbox']) && !empty($_POST['searchbox']) ? $_POST['searchbox'] : 'Cerca nelle note...') ?>
                 </div>
                 <div class="col-md-2" style="text-align:left">
                     <div class="form-group">
@@ -45,45 +49,20 @@ foreach ($financesArray as $value) {
         <div class="chat-box p-3">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="paymenttypes">Modalità di pagamento:</label>
-                        <select class="form-control" name="paymenttypeid[]" style="flex:1;" multiple>
-                            <?php foreach($paymenttypes as $paymenttype) {?>
-                            <option value="<?=$paymenttype['id']?>" <?= isset($_POST['paymenttypeid']) && in_array($paymenttype['id'], $_POST['paymenttypeid']) ? 'selected' : '' ?>><?=$paymenttype['paymenttype']?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
+                    <?= Component::createInputSelect('paymenttypeid[]', 'Modalità di pagamento', $paymenttypes, false, true) ?>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="categoryid">Categoria:</label>
-                        <select class="form-control" name="categoryid[]" style="flex:1;" multiple>
-                            <?php foreach($categories as $category) {?>
-                            <option value="<?=$category['id']?>" <?= isset($_POST['categoryid']) && in_array($category['id'], $_POST['categoryid']) ? 'selected' : '' ?>><?=$category['category']?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
+                    <?= Component::createInputSelect('categoryid[]', 'Categoria', $categories, false, true) ?>
                 </div>
             </div>
         </div>
         <div class="chat-box p-3">
             <div class="row">
-                <div class="col-md-6"><div class="form-group">
-                        <label for="types">Entrate/Uscite</label>
-                        <select class="form-control" name="types[]" style="flex:1;" multiple>
-                            <option value="E" <?= isset($_POST['types']) && in_array('E', $_POST['types']) ? 'selected' : '' ?>>Entrate</option>
-                            <option value="U" <?= isset($_POST['types']) && in_array('U', $_POST['types']) ? 'selected' : '' ?>>Uscite</option>
-                        </select>
-                    </div></div>
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="periodo">Periodo:</label>
-                        <select class="form-control" name="periodo[]" style="flex:1;" multiple>
-                            <?php foreach($months as $month) {?>
-                            <option value="<?=$month?>"><?= $monthsList[$month]?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
+                    <?= Component::createInputSelect('types[]', 'Entrate/Uscite', ['E' => 'Entrate', 'U' => 'Uscite'], false, true) ?>
+                </div>
+                <div class="col-md-6">
+                    <?= Component::createInputSelect('periodo[]', 'Periodo', $months, false, true, false, true) ?>
                 </div>
             </div>
         </div>
@@ -122,9 +101,10 @@ foreach ($financesArray as $value) {
                 <td><?= $financeValue['paymenttype'] ?></td>
                 <td style="color:<?= $financeValue['type'] == 'U' ? 'red' : 'green' ?>; text-align:right"><strong><?= $financeValue['amount'] ?> €</strong></td>
                 <td><?= $financeValue['description'] ?></td>
-                <td>
-                    <a href="index.php?page=financeprospect&edittransaction=<?=$financeValue['id']?>">Modifica</a> - 
-                    <a href="index.php?page=financeprospect&deletetransaction=<?=$financeValue['id']?>">Cancella</a>
+                <td style="text-align:center; text-size: 6px">
+                    <?php if ($financeValue['payed'] == 0) { echo '<a href="'.refreshPage().'&payid=' . $financeValue['id'] . '">Pagato</a><br>'; }?>
+                    <a href="<?=refreshPage()?>&edittransaction=<?=$financeValue['id']?>">Modifica</a><br>
+                    <a href="<?=refreshPage()?>&deletetransaction=<?=$financeValue['id']?>">Cancella</a>
                 </td>
             </tr>
             <?php } ?>

@@ -173,5 +173,10 @@
         "id": 35,
         "message": "Metodo di pagamento per Finance Manager modificato con successo",
         "style": "success"
+    },
+    {
+        "id": 36,
+        "message": "Transazione pagata con successo",
+        "style": "primary"
     }
 ]

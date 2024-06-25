@@ -83,10 +83,7 @@ class FinanceController
         $categoriesArray = array();
 
         foreach ($this->category->getCategory() as $value) {
-            $categoriesArray[] = array(
-                "id" => $value['id'],
-                "category" => $value['category']
-            );
+            $categoriesArray[$value['id']] = $value['category'];
         }
         return $categoriesArray;
     }
@@ -109,10 +106,7 @@ class FinanceController
         $categoriesArray = array();
 
         foreach ($this->paymentType->getPaymentTypes() as $value) {
-            $categoriesArray[] = array(
-                "id" => $value['id'],
-                "paymenttype" => $value['paymenttype']
-            );
+            $categoriesArray[$value['id']] = $value['paymenttype'];
         }
         return $categoriesArray;
     }
@@ -203,6 +197,32 @@ class FinanceController
             );
         }
         return $financesArray;
+    }
+/*
+    public function editUser($userPost) {
+        if (!empty($this->userData['editid']) && isset($this->userData['editid'])) {
+            $userPost[3] = !empty($userPost[3]) ? 1 : 0;
+            
+            if ($this->user->updateUserById($this->userData['editid'], $userPost)) {
+                header("Location: " . refreshPage() . "&idmsg=26");
+            }
+        }
+    }*/
+    public function editTransaction($financeId) {
+        dump($financeId);
+        if (!empty($financeId) && isset($financeId)) {
+            $financeData = $this->finance->getTransactionById($financeId);
+            dump($financeData);
+        }
+    }
+
+    public function payTransaction($financeId) {
+        dump($financeId);
+        if (!empty($financeId) && isset($financeId)) {
+            if ($this->finance->updatePayTransaction($financeId)) {
+                header("Location: " . refreshPage() . "&idmsg=36");
+            }
+        }
     }
 }
 ?>

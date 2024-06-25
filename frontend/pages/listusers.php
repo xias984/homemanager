@@ -37,7 +37,7 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
                         //attribuisco il valore per ogni cella
                         if ($key === 0 || $key === 1 || $key === 2) {
                             if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $user[4]) {
-                                echo '<input type="text" value="' . $value . '" name="' . $key . '">';
+                                Component::createInputText($key, '', $value, '', false, 'text');
                             } else {
                                 echo $value;
                             }

@@ -7,7 +7,6 @@ if ((!empty($_POST) && isset($_POST)) || (!empty($_FILES['logo']) && isset($_FIL
 
 ?>
 <?= Component::createTitle('Configurazione Sito') ?>
-<div>&nbsp;</div>
 <form class="row g-3" action="" method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-3">
@@ -20,16 +19,10 @@ if ((!empty($_POST) && isset($_POST)) || (!empty($_FILES['logo']) && isset($_FIL
         </div>
         <div class="col-md-6">
             <form action="" method="post">
-                <div class="form-group">
-                    <label for="namesite">Modifica nome sito:</label>
-                    <input type="text" class="form-control" name="namesite" value="<?=$configData['name']?>">
-                </div>
-                <div class="form-group">
-                    <label for="descriptionsite">Modifica descrizione sito:</label>
-                    <input type="text" class="form-control" name="descriptionsite" value="<?=$configData['description']?>">
-                </div>
+                <?= Component::createInputText('namesite', 'Modifica nome sito:', $configData['name']) ?>
+                <?= Component::createInputText('descriptionsite', 'Modifica descrizione sito:', $configData['description']) ?>
                 <?= $configSite->viewThemePicker() ?>
-                <button type="submit" class="btn btn-primary">Salva</button>
+                <?= Component::createSubmitButton('Salva', 'primary') ?>
             </form>
         </div>
         <div class="col-md-3">

@@ -9,11 +9,8 @@ $auth->resetPassword();
     </div>
     <div class="col-md-6">
         <form action="" method="post">
-            <div class="form-group">
-                <label for="email">Inserisci l'email:</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Inserisci la tua email" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Richiedi nuova password</button>
+            <?= Component::createInputText('email', 'Inserisci l\'email:', '', 'Inserisci la tua email', true) ?>
+            <?= Component::createSubmitButton('Richiedi nuova password', 'primary') ?>
         </form>
     </div>
     <div class="col-md-3">

@@ -83,5 +83,25 @@ class Finance {
         }
     
         return $finances;
-    }    
+    }
+    
+    public function getTransactionById($financeId) {
+        global $conn;
+        $query = "SELECT * FROM $this->table WHERE id = $financeId";
+        $result = mysqli_query($conn, $query);
+    
+        if ($result && $result->num_rows > 0) {
+            return mysqli_fetch_assoc($result);
+        }
+    }
+
+    public function updatePayTransaction($financeId) {
+        global $conn;
+        $query = "UPDATE $this->table SET payed = 1 WHERE id = $financeId";
+        $result = mysqli_query($conn, $query);
+    
+        if ($result) {
+            return true;
+        }
+    }
 }
