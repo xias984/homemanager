@@ -1,6 +1,5 @@
 /backupdb.sh
 /dump_file.sql
-/system/env.php
 /.idea
 .gitignore
 /frontend/pages/financeprospect2.php

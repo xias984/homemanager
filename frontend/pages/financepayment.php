@@ -63,11 +63,11 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
                             echo $value;
                         } else if ($key == 3) {
                             if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $paymenttype[3]) {
-                                echo '<a href="#" onclick="document.getElementById(\'editpaymenttype\').submit();">Conferma</a> - ' .
-                                    '<a href="'.refreshPage().'">Chiudi</a>';
+                                echo '<a href="#" onclick="document.getElementById(\'editpaymenttype\').submit();"><i class="fa-solid fa-check"></i></a> ' .
+                                    '<a href="'.refreshPage().'"><i class="fa-solid fa-xmark"></i></a>';
                             } else {
-                                echo '<a href="index.php?page=financepayment&editid=' . $value . '">Modifica</a> - 
-                                <a href="index.php?page=financepayment&deleteid=' . $value . '">Cancella</a>';
+                                echo '<a href="index.php?page=financepayment&editid=' . $value . '"><i class="fa-regular fa-pen-to-square"></i></a> 
+                                <a href="index.php?page=financepayment&deleteid=' . $value . '"><i class="fa-solid fa-trash-can"></i></a>';
                             }
                         }
                         echo '</td>';

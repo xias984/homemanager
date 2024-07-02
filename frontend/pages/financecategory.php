@@ -63,11 +63,11 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
                             echo $value;
                         } else if ($key == 3) {
                             if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $category[3]) {
-                                echo '<a href="#" onclick="document.getElementById(\'editcategory\').submit();">Conferma</a> - ' .
-                                    '<a href="'.refreshPage().'">Chiudi</a>';
+                                echo '<a href="#" onclick="document.getElementById(\'editcategory\').submit();"><i class="fa-solid fa-check"></i></a> ' .
+                                    '<a href="'.refreshPage().'"><i class="fa-solid fa-xmark"></i></a>';
                             } else {
-                                echo '<a href="index.php?page=financecategory&editid=' . $value . '">Modifica</a> - 
-                                <a href="index.php?page=financecategory&deleteid=' . $value . '">Cancella</a>';
+                                echo '<a href="index.php?page=financecategory&editid=' . $value . '"><i class="fa-regular fa-pen-to-square"></i></a> 
+                                <a href="index.php?page=financecategory&deleteid=' . $value . '"><i class="fa-solid fa-trash-can"></i></a>';
                             }
                         }
                         echo '</td>';

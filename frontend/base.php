@@ -9,7 +9,6 @@ ob_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
     body {
         background-color: <?=$colors['sfondo']?>;
@@ -94,10 +93,6 @@ ob_start();
         margin-bottom: 10px;
     }
 
-    .actions {
-        font-size: 12px;
-    }
-
     .title {
         text-align: center;
         margin-bottom: 20px;
@@ -171,6 +166,7 @@ ob_start();
             </div>
         </div>
     </div>
+    <script src="https://kit.fontawesome.com/493966b2aa.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <script src="assets/scripts.js"></script>

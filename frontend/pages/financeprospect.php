@@ -99,12 +99,12 @@ if (isset($_GET['payid']) && !empty($_GET['payid'])) {
                 <td><?= date('d/m/Y', strtotime($financeValue['paymentdate'])) ?></td>
                 <td><?= $financeValue['category'] ?></td>
                 <td><?= $financeValue['paymenttype'] ?></td>
-                <td style="color:<?= $financeValue['type'] == 'U' ? 'red' : 'green' ?>; text-align:right"><strong><?= $financeValue['amount'] ?> €</strong></td>
+                <td style="color:<?= $financeValue['payed'] ? $financeValue['type'] == 'U' ? 'red' : 'lightgreen' : $colors['subtitle']?>; text-align:right"><?= $financeValue['amount'] ?> €</td>
                 <td><?= $financeValue['description'] ?></td>
-                <td style="text-align:center; text-size: 6px">
-                    <?php if ($financeValue['payed'] == 0) { echo '<a href="'.refreshPage().'&payid=' . $financeValue['id'] . '">Pagato</a><br>'; }?>
-                    <a href="<?=refreshPage()?>&edittransaction=<?=$financeValue['id']?>">Modifica</a><br>
-                    <a href="<?=refreshPage()?>&deletetransaction=<?=$financeValue['id']?>">Cancella</a>
+                <td>
+                    <?php if ($financeValue['payed'] == 0) { echo '<a href="'.refreshPage().'&payid=' . $financeValue['id'] . '" alt="Paga"><i class="fa-solid fa-cash-register"></i></a>'; }?>
+                    <a href="<?=refreshPage()?>&edittransaction=<?=$financeValue['id']?>"><i class="fa-regular fa-pen-to-square"></i></a>
+                    <a href="<?=refreshPage()?>&deletetransaction=<?=$financeValue['id']?>"><i class="fa-solid fa-trash-can"></i></a>
                 </td>
             </tr>
             <?php } ?>

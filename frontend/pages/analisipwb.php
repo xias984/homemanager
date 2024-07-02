@@ -21,7 +21,7 @@ $result = fetchDataFromApi('http://192.168.1.16:5000/api/products');
                 <td><?= $product['asin'] ?></td>
                 <td><?= $product['category'] ?></td>
                 <td><?= $product['created_at'] ?></td>
-                <td><a href="<?= $product['url'] ?>" target="_blank">Visualizza</a></td>
+                <td><a href="<?= $product['url'] ?>" target="_blank"><i class="fa-solid fa-link"></i></a></td>
             </tr>
         <?php } ?>
         </tbody>

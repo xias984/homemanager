@@ -10,7 +10,6 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
         $users->editUser($_POST);
     }
 }
-
 ?>
 <?= Component::createTitle('Lista utenti') ?>
 <div class="row">
@@ -37,7 +36,8 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
                         //attribuisco il valore per ogni cella
                         if ($key === 0 || $key === 1 || $key === 2) {
                             if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $user[4]) {
-                                Component::createInputText($key, '', $value, '', false, 'text');
+                                //Component::createInputText($key, '', $value, '', false, 'text');
+                                echo '<input type="text" value="' . $value . '" name="' . $key . '" id="' . $key . '">';
                             } else {
                                 echo $value;
                             }
@@ -47,11 +47,11 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
                             echo '<input class="form-check-input" type="checkbox" name="' . $key . '" ' . $checked . ' ' . $disabled . '>';
                         } elseif ($key === 4) {
                             if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $user[4]) {
-                                echo '<a href="#" onclick="document.getElementById(\'edituser\').submit();">Conferma</a> - ' .
-                                    '<a href="'.refreshPage().'">Chiudi</a>';
+                                echo '<a href="#" onclick="document.getElementById(\'edituser\').submit();"><i class="fa-solid fa-check"></i></a> ' .
+                                    '<a href="'.refreshPage().'"><i class="fa-solid fa-xmark"></i></a>';
                             } else {
-                                echo '<a href="index.php?page=listusers&editid=' . $value . '">Modifica</a> - ' .
-                                    '<a href="index.php?page=listusers&deleteid=' . $value . '">Cancella</a>';
+                                echo '<a href="index.php?page=listusers&editid=' . $value . '"><i class="fa-regular fa-pen-to-square"></i></a> ' .
+                                    '<a href="index.php?page=listusers&deleteid=' . $value . '"><i class="fa-solid fa-trash-can"></i></a>';
                             }
                         } else {
                             echo $value;
