@@ -35,17 +35,9 @@ global $colors;
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#submenu1">
+                    <a class="nav-link cursor-pointer" href="index.php?page=passwordmanager">
                         <h5><i class="fa-solid fa-key"></i> Password Manager</h5>
                     </a>
-                    <ul class="nav flex-column ml-3 collapse" id="submenu1">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Sottomenu 1.1</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Sottomenu 1.2</a>
-                        </li>
-                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#submenu2">

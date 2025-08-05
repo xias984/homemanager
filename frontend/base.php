@@ -118,6 +118,46 @@ ob_start();
         background-color: <?=$colors['sfondo']?>;
         color: <?=$colors['secondario']?>;
     }
+
+    /* Password Manager */
+    .password-field {
+        font-family: monospace;
+    }
+
+    .card {
+        background-color: <?=$colors['sfondo2']?>;
+        border: 1px solid <?=$colors['sfondo']?>;
+        margin-bottom: 20px;
+    }
+
+    .card-header {
+        background-color: <?=$colors['sfondo']?>;
+        border-bottom: 1px solid <?=$colors['sfondo2']?>;
+        color: <?=$colors['secondario']?>;
+    }
+
+    .btn-group .btn {
+        margin-right: 2px;
+    }
+
+    .input-group-append .btn {
+        border-left: 0;
+    }
+
+    .modal-content {
+        background-color: <?=$colors['sfondo2']?>;
+        color: <?=$colors['principale']?>;
+    }
+
+    .modal-header {
+        background-color: <?=$colors['sfondo']?>;
+        border-bottom: 1px solid <?=$colors['sfondo2']?>;
+    }
+
+    .modal-footer {
+        background-color: <?=$colors['sfondo']?>;
+        border-top: 1px solid <?=$colors['sfondo2']?>;
+    }
     </style>
 </head>
 

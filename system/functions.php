@@ -45,6 +45,7 @@ function getPage()
             case 'financeprospect':
             case 'financepayment':
             case 'analisipwb':
+            case 'passwordmanager':
                 redirect('login', $page);
                 break;
             case 'listusers':

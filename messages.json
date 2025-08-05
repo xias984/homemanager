@@ -178,5 +178,35 @@
         "id": 36,
         "message": "Transazione pagata con successo",
         "style": "primary"
+    },
+    {
+        "id": 37,
+        "message": "Servizio creato con successo",
+        "style": "success"
+    },
+    {
+        "id": 38,
+        "message": "Servizio modificato con successo",
+        "style": "success"
+    },
+    {
+        "id": 39,
+        "message": "Servizio eliminato con successo",
+        "style": "primary"
+    },
+    {
+        "id": 40,
+        "message": "Password aggiunta con successo",
+        "style": "success"
+    },
+    {
+        "id": 41,
+        "message": "Password modificata con successo",
+        "style": "success"
+    },
+    {
+        "id": 42,
+        "message": "Password eliminata con successo",
+        "style": "primary"
     }
 ]
