@@ -108,6 +108,26 @@ class Finance {
         }
     }
 
+    public function updateTransactionById($transactionData) {
+        global $conn;
+        
+        $query = "UPDATE $this->table SET 
+                    type = '".addslashes($transactionData['type'])."',
+                    amount = ".intval($transactionData['amount']).",
+                    description = '".addslashes($transactionData['description'])."',
+                    categoryid = ".intval($transactionData['categoryid']).",
+                    paymenttypeid = ".intval($transactionData['paymenttypeid']).",
+                    paymentdate = '".addslashes($transactionData['paymentdate'])."'
+                  WHERE id = ".intval($transactionData['id']);
+        
+        $result = mysqli_query($conn, $query);
+
+        if ($result) {
+            return true;
+        }
+        return false;
+    }
+
     public function deleteTransactionById($financeId) {
         global $conn;
         $query = "DELETE FROM $this->table WHERE id = $financeId";

@@ -210,8 +210,27 @@ class FinanceController
     }*/
     public function editTransaction($financeId) {
         if (!empty($financeId) && isset($financeId)) {
-            if ($this->finance->updateTransactionById($financeId)) {
-                header("Location: " . refreshPage() . "&idmsg=44");
+            $transaction = $this->finance->getTransactionById($financeId);
+            return $transaction;
+        }
+    }
+
+    public function updateTransaction($financeId, $transactionData) {
+        if (!empty($financeId) && isset($financeId) && !empty($transactionData)) {
+            $updateArray = array(
+                "id" => $financeId,
+                "type" => $transactionData['type'],
+                "amount" => $transactionData['amount'],
+                "description" => $transactionData['description'],
+                "categoryid" => $transactionData['categoryid'],
+                "paymenttypeid" => $transactionData['paymenttypeid'],
+                "paymentdate" => $transactionData['paymentdate']
+            );
+            
+            if ($this->finance->updateTransactionById($updateArray)) {
+                header("Location: " . refreshPage() . "&idmsg=44#table-container");
+            } else {
+                header("Location: " . refreshPage() . "&idmsg=45#table-container");
             }
         }
     }
@@ -219,7 +238,7 @@ class FinanceController
     public function deleteTransaction($financeId) {
         if (!empty($financeId) && isset($financeId)) {
             if ($this->finance->deleteTransactionById($financeId)) {
-                header("Location: " . refreshPage() . "&idmsg=43");
+                header("Location: " . refreshPage() . "&idmsg=43#table-container");
             }
         }
     }
@@ -227,7 +246,7 @@ class FinanceController
     public function payTransaction($financeId) {
         if (!empty($financeId) && isset($financeId)) {
             if ($this->finance->updatePayTransaction($financeId)) {
-                header("Location: " . refreshPage() . "&idmsg=36");
+                header("Location: " . refreshPage() . "&idmsg=36#table-container");
             }
         }
     }

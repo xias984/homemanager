@@ -218,5 +218,10 @@
         "id": 44,
         "message": "Transazione modificata con successo",
         "style": "success"
+    },
+    {
+        "id": 45,
+        "message": "Errore nella modifica della transazione",
+        "style": "danger"
     }
 ]
