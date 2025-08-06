@@ -66,10 +66,31 @@ class Finance {
         }
 
         if (isset($filters['periodo']) && !empty($filters['periodo']) && is_array($filters['periodo'])) {
-            $sanitizedPeriods = array_map(function($period) {
-                return (int) $period; // Ensure it's an integer
-            }, $filters['periodo']);
-            $where .= " AND MONTH(paymentdate) IN (" . implode(',', $sanitizedPeriods) . ")";
+            $periodConditions = [];
+            
+            foreach ($filters['periodo'] as $period) {
+                if (strpos($period, '-') !== false) {
+                    // Formato mese-anno (es: "06-2024")
+                    list($month, $year) = explode('-', $period);
+                    $month = (int) $month;
+                    $year = (int) $year;
+                    
+                    if ($month >= 1 && $month <= 12 && $year > 0) {
+                        $periodConditions[] = "(MONTH(paymentdate) = $month AND YEAR(paymentdate) = $year)";
+                    }
+                } else {
+                    // Formato solo mese (backward compatibility)
+                    $month = (int) $period;
+                    if ($month >= 1 && $month <= 12) {
+                        $periodConditions[] = "MONTH(paymentdate) = $month";
+                    }
+                }
+            }
+            
+            // Verifica che ci siano condizioni valide
+            if (!empty($periodConditions)) {
+                $where .= " AND (" . implode(' OR ', $periodConditions) . ")";
+            }
         }
     
         $query = "SELECT * FROM $this->table $where";

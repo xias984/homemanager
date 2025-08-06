@@ -8,13 +8,36 @@ if (isset($_POST['reset'])) {
 }
 
 $finances = new FinanceController();
-$financesArray = $finances->selectFinances($_POST);
 
-$monthArray = [];
-foreach ($finances->selectFinances() as $financesValue) {
-    $monthArray[] = date('m', strtotime($financesValue['paymentdate']));
+// Genera sempre tutti i mesi disponibili dal database (senza filtri)
+$allFinances = $finances->selectFinances();
+$monthYearArray = [];
+foreach ($allFinances as $financesValue) {
+    $monthYearArray[] = date('m-Y', strtotime($financesValue['paymentdate']));
 }
-$months = array_unique($monthArray);
+$monthYears = array_unique($monthYearArray);
+
+// Crea array associativo con nomi dei mesi in italiano + anno
+$monthsWithNames = [];
+foreach ($monthYears as $monthYear) {
+    list($month, $year) = explode('-', $monthYear);
+    $monthName = date('F', mktime(0, 0, 0, $month, 1)); // Nome del mese in inglese
+    
+    // Converti in italiano
+    $italianMonths = [
+        'January' => 'Gennaio', 'February' => 'Febbraio', 'March' => 'Marzo',
+        'April' => 'Aprile', 'May' => 'Maggio', 'June' => 'Giugno',
+        'July' => 'Luglio', 'August' => 'Agosto', 'September' => 'Settembre',
+        'October' => 'Ottobre', 'November' => 'Novembre', 'December' => 'Dicembre'
+    ];
+    
+    $italianMonth = $italianMonths[$monthName] ?? $monthName;
+    $shortYear = substr($year, -2); // Prendi solo le ultime 2 cifre dell'anno
+    $monthsWithNames[$monthYear] = $italianMonth . ' ' . $shortYear;
+}
+
+// Ora applica i filtri per i dati da mostrare
+$financesArray = $finances->selectFinances($_POST);
 $categories = $finances->selectCategories();
 $paymenttypes = $finances->selectPaymentTypes();
 
@@ -77,7 +100,7 @@ if (isset($_GET['payid']) && !empty($_GET['payid'])) {
                     <?= Component::createInputSelect('types[]', 'Entrate/Uscite', ['E' => 'Entrate', 'U' => 'Uscite'], false, true) ?>
                 </div>
                 <div class="col-md-6">
-                    <?= Component::createInputSelect('periodo[]', 'Periodo', $months, false, true, false, true) ?>
+                    <?= Component::createInputSelect('periodo[]', 'Periodo', $monthsWithNames, false, true, false, true) ?>
                 </div>
             </div>
         </div>
