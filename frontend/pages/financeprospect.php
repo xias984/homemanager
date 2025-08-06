@@ -24,6 +24,9 @@ foreach ($financesArray as $value) {
 if (isset($_GET['edittransaction'])) {
     $editTransaction = $finances->editTransaction($_GET['edittransaction']);
 }
+if (isset($_GET['deletetransaction']) && !empty($_GET['deletetransaction'])) {
+    $finances->deleteTransaction($_GET['deletetransaction']);
+}
 if (isset($_GET['payid']) && !empty($_GET['payid'])) {
     $finances->payTransaction($_GET['payid']);
 }
@@ -81,7 +84,7 @@ if (isset($_GET['payid']) && !empty($_GET['payid'])) {
     </div>
 </div>
 <div>&nbsp;</div>
-<div class="col-md-12" style="text-align:center; overflow-x: auto;">
+<div class="col-md-12" id="table-container" style="text-align:center; overflow-x: auto;">
     <table class="table responsive">
         <thead>
             <tr>
@@ -102,7 +105,7 @@ if (isset($_GET['payid']) && !empty($_GET['payid'])) {
                 <td style="color:<?= $financeValue['payed'] ? $financeValue['type'] == 'U' ? 'red' : 'lightgreen' : $colors['subtitle']?>; text-align:right"><?= $financeValue['amount'] ?> €</td>
                 <td><?= $financeValue['description'] ?></td>
                 <td>
-                    <?php if ($financeValue['payed'] == 0) { echo '<a href="'.refreshPage().'&payid=' . $financeValue['id'] . '" alt="Paga"><i class="fa-solid fa-cash-register"></i></a>'; }?>
+                    <a href="<?=refreshPage()?>&payid=<?=$financeValue['id']?>#table-container" alt="Paga"><i class="fa-solid fa-cash-register"></i></a>
                     <a href="<?=refreshPage()?>&edittransaction=<?=$financeValue['id']?>"><i class="fa-regular fa-pen-to-square"></i></a>
                     <a href="<?=refreshPage()?>&deletetransaction=<?=$financeValue['id']?>"><i class="fa-solid fa-trash-can"></i></a>
                 </td>

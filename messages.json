@@ -208,5 +208,15 @@
         "id": 42,
         "message": "Password eliminata con successo",
         "style": "primary"
+    },
+    {
+        "id": 43,
+        "message": "Transazione eliminata con successo",
+        "style": "primary"
+    },
+    {
+        "id": 44,
+        "message": "Transazione modificata con successo",
+        "style": "success"
     }
 ]

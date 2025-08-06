@@ -39,7 +39,7 @@ global $colors;
                         <h5><i class="fa-solid fa-key"></i> Password Manager</h5>
                     </a>
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#submenu2">
                         <h5><i class="fa-solid fa-photo-film"></i> Photo Manager</h5>
                     </a>
@@ -61,7 +61,7 @@ global $colors;
                             <a class="nav-link" href="index.php?page=analisipwb">Lista prodotti</a>
                         </li>
                     </ul>
-                </li>
+                </li>-->
                 <?php if (isAdmin()): ?>
                 <li class="nav-item">
                     <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#admin">

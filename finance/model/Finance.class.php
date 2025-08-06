@@ -97,9 +97,22 @@ class Finance {
 
     public function updatePayTransaction($financeId) {
         global $conn;
-        $query = "UPDATE $this->table SET payed = 1 WHERE id = $financeId";
+
+        $financeData = $this->getTransactionById($financeId);
+        $payed = $financeData['payed'] == 1 ? 0 : 1;
+        $query = "UPDATE $this->table SET payed = $payed WHERE id = $financeId";
         $result = mysqli_query($conn, $query);
     
+        if ($result) {
+            return true;
+        }
+    }
+
+    public function deleteTransactionById($financeId) {
+        global $conn;
+        $query = "DELETE FROM $this->table WHERE id = $financeId";
+        $result = mysqli_query($conn, $query);
+
         if ($result) {
             return true;
         }

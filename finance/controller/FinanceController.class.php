@@ -209,15 +209,22 @@ class FinanceController
         }
     }*/
     public function editTransaction($financeId) {
-        dump($financeId);
         if (!empty($financeId) && isset($financeId)) {
-            $financeData = $this->finance->getTransactionById($financeId);
-            dump($financeData);
+            if ($this->finance->updateTransactionById($financeId)) {
+                header("Location: " . refreshPage() . "&idmsg=44");
+            }
+        }
+    }
+
+    public function deleteTransaction($financeId) {
+        if (!empty($financeId) && isset($financeId)) {
+            if ($this->finance->deleteTransactionById($financeId)) {
+                header("Location: " . refreshPage() . "&idmsg=43");
+            }
         }
     }
 
     public function payTransaction($financeId) {
-        dump($financeId);
         if (!empty($financeId) && isset($financeId)) {
             if ($this->finance->updatePayTransaction($financeId)) {
                 header("Location: " . refreshPage() . "&idmsg=36");
