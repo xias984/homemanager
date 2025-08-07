@@ -163,20 +163,47 @@ class FinanceController
 
     public function registerAmount($amountData) {
         if (!empty($amountData)) {
-            $now = date("Y-m-d H:i:s");
-            $amountArray = array(
-                "iduser" => $amountData['iduser'],
-                "typeamount" => $amountData['typeamount'],
-                "amount" => $amountData['amount'] ?: 0,
-                "description" => $amountData['description'],
-                "categoryid" => $amountData['categoryid'],
-                "paymenttypeid" => $amountData['paymenttypeid'],
-                "paymentdate" => $amountData['paymentdate'] ?: $now
-            );
+            $iduser = $amountData['iduser'] ?? null;
+            $typeamount = $amountData['typeamount'] ?? null;
+            $amount = $amountData['amount'] ?? null;
+            $description = $amountData['description'] ?? null;
+            $categoryid = $amountData['categoryid'] ?? null;
+            $paymenttypeid = $amountData['paymenttypeid'] ?? null;
+            $paymentdate = $amountData['paymentdate'] ?? null;
+            
+            // Verifica se è una transazione rateizzata
+            $installment = isset($amountData['installment']) && $amountData['installment'] === '1'; // La checkbox invia '1' se selezionata
+            $installmentEndDate = $amountData['installmentenddate'] ?? null;
+            if ($installment && !empty($installmentEndDate)) {
+                $success = $this->finance->registerInstallmentAmount(
+                    $iduser,
+                    $typeamount,
+                    $amount,
+                    $description,
+                    $categoryid,
+                    $paymenttypeid,
+                    $paymentdate,
+                    $installmentEndDate
+                );
+            } else {
+                $amountArray = array(
+                    "iduser" => $iduser,
+                    "typeamount" => $typeamount,
+                    "amount" => $amount ?: 0,
+                    "description" => $description,
+                    "categoryid" => $categoryid,
+                    "paymenttypeid" => $paymenttypeid,
+                    "paymentdate" => $paymentdate ?: date("Y-m-d H:i:s"),
+                    "installment_end_date" => null
+                );
+                $success = $this->finance->createTransaction($amountArray);
+            }
 
-            $this->finance->createTransaction($amountArray);
-
-            header("Location: " . refreshPage() . "&idmsg=32");
+            if ($success) {
+                header("Location: " . refreshPage() . "&idmsg=32");
+            } else {
+                header("Location: " . refreshPage() . "&idmsg=46");
+            }
         }
     }
 

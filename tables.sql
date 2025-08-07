@@ -83,6 +83,7 @@ CREATE TABLE `finance` (
   `description` varchar(100) DEFAULT NULL,
   `categoryid` int NOT NULL,
   `paymentdate` datetime NOT DEFAULT NULL,
+  `installment_end_date` date DEFAULT NULL,
   `payed` tinyint(1) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

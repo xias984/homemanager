@@ -143,4 +143,28 @@ class Component
 
         echo $buttonHtml;
     }
+
+    /**
+     * Crea una checkbox.
+     *
+     * @param string $name Nome della checkbox.
+     * @param string $label Etichetta da visualizzare accanto alla checkbox.
+     * @param bool $checked Indica se la checkbox è selezionata di default.
+     * @param string $id ID HTML della checkbox (se non specificato, userà il nome).
+     * @return string HTML della checkbox.
+     */
+    public static function createCheckbox($name, $label, $checked = false, $id = '')
+    {
+        $checkboxId = $id ?: $name; // Usa l'ID fornito o il nome come fallback
+        $checkedAttr = $checked ? 'checked' : '';
+        
+        $html = "
+        <div class='form-check mb-3'>
+            <input class='form-check-input' type='checkbox' id='{$checkboxId}' name='{$name}' value='1' {$checkedAttr}>
+            <label class='form-check-label' for='{$checkboxId}'>
+                {$label}
+            </label>
+        </div>";
+        return $html;
+    }
 }

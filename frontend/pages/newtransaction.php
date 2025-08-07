@@ -17,10 +17,14 @@ if (!empty($_POST)) {
             <?= Component::createInputText('iduser', '', $_SESSION['iduser'], '', false, 'hidden'); ?>
             <?= Component::createInputSelect('typeamount', 'Tipo importo', ['E' => 'Entrate', 'U' => 'Uscite'], false) ?>
             <?= Component::createInputText('amount', 'Importo', '', '0', true, 'number'); ?>
+            <?= Component::createCheckbox('installment', 'Rata', false, 'installmentCheckbox'); ?>
+            <div id="installmentEndDateContainer" style="display: none;">
+                <?= Component::createInputText('installmentenddate', 'Data di estinzione rata', '', '', true, 'date'); ?>
+            </div>
             <?= Component::createInputText('description', 'Descrizione', '', ''); ?>
             <?= Component::createInputSelect('categoryid', 'Categoria', $categories, false); ?>
             <?= Component::createInputSelect('paymenttypeid', 'Modalità di pagamento', $paymenttypes, false); ?>
-            <?= Component::createInputText('paymentdate', 'Data di pagamento', '', '', true, 'date'); ?>
+            <?= Component::createInputText('paymentdate', 'Data di pagamento', '', '', true, 'date'); ?>    
             <?= Component::createSubmitButton('Inserisci', 'secondary'); ?>
         </form>
     </div>

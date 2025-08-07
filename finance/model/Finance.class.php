@@ -9,20 +9,78 @@ class Finance {
     public function createTransaction($transactionData) {
         global $conn;
 
-        $query = "INSERT INTO $this->table (type, amount, userid, description, categoryid, paymenttypeid, paymentdate) VALUES (
-                '".$transactionData['typeamount']."', 
-                ".$transactionData['amount'].", 
-                ".$transactionData['iduser'].",
-                '".$transactionData['description']."',
-                ".$transactionData['categoryid'].",
-                ".$transactionData['paymenttypeid'].",
-                '".$transactionData['paymentdate']."'
+        $typeamount = mysqli_real_escape_string($conn, $transactionData['typeamount']);
+        $amount = (float)$transactionData['amount'];
+        $iduser = (int)$transactionData['iduser'];
+        $description = mysqli_real_escape_string($conn, $transactionData['description']);
+        $categoryid = (int)$transactionData['categoryid'];
+        $paymenttypeid = (int)$transactionData['paymenttypeid'];
+        $paymentdate = mysqli_real_escape_string($conn, $transactionData['paymentdate']);
+
+        $installmentEndDate = isset($transactionData['installment_end_date']) && $transactionData['installment_end_date'] !== null
+            ? "'" . mysqli_real_escape_string($conn, $transactionData['installment_end_date']) . "'"
+            : "NULL";
+
+        $query = "INSERT INTO $this->table (type, amount, userid, description, categoryid, paymenttypeid, paymentdate, installment_end_date) VALUES (
+                '$typeamount',
+                $amount,
+                $iduser,
+                '$description',
+                $categoryid,
+                $paymenttypeid,
+                '$paymentdate',
+                $installmentEndDate
             )";
         $result = mysqli_query($conn, $query);
 
         if ($result) {
             return true;
         }
+    }
+
+    public function registerInstallmentAmount($iduser, $typeamount, $totalAmount, $description, $categoryid, $paymenttypeid, $startDate, $endDate) {
+        global $conn;
+
+        $start = new DateTime($startDate);
+        $end = new DateTime($endDate);
+        $end->modify('+1 day');
+        $interval = DateInterval::createFromDateString('1 month');
+        $period = new DatePeriod($start, $interval, $end);
+
+        $numMonths = 0;
+        foreach ($period as $dt) {
+            $numMonths++;
+        }
+
+        if ($numMonths === 0) {
+            error_log("Errore: Numero di mesi per la rata è zero. Start: {$startDate}, End: {$endDate}");
+            return false;
+        }
+
+        $success = true;
+        foreach ($period as $dt) {
+            $installmentDate = $dt->format('Y-m-d');
+            
+            $installmentDescription = $description . " (Rata " . $dt->format('m/Y') . ")";
+
+            $transactionData = [
+                'iduser' => $iduser,
+                'typeamount' => $typeamount,
+                'amount' => $totalAmount,
+                'description' => $installmentDescription,
+                'categoryid' => $categoryid,
+                'paymenttypeid' => $paymenttypeid,
+                'paymentdate' => $installmentDate,
+                'installment_end_date' => $endDate
+            ];
+
+            if (!$this->createTransaction($transactionData)) {
+                $success = false;
+                error_log("Errore durante la registrazione della rata per il mese: " . $installmentDate);
+                break;
+            }
+        }
+        return $success;
     }
 
     public function getTransactions($filters) {
