@@ -1,10 +1,5 @@
 <?php
-    global $messages;
-	global $title;
-	global $description;
-	global $logo;
-
-    $theme = new ConfigurationController();
+ob_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
     body {
         background-color: <?=$colors['sfondo']?>;
@@ -74,17 +68,17 @@
 
     .message {
         font-weight: bold;
-        color: <?= $colors['link']?>;
+        color: <?=$colors['link']?>;
     }
 
     .answer {
         font-weight: bold;
-        color: <?= $colors['link']?>;
-        text-align:right;
+        color: <?=$colors['link']?>;
+        text-align: right;
     }
 
     .answer-text {
-        text-align:right;   
+        text-align: right;
     }
 
     .actions-column {
@@ -99,12 +93,8 @@
         margin-bottom: 10px;
     }
 
-    .actions {
-        font-size: 12px;
-    }
-
     .title {
-        text-align:center;
+        text-align: center;
         margin-bottom: 20px;
     }
 
@@ -128,11 +118,51 @@
         background-color: <?=$colors['sfondo']?>;
         color: <?=$colors['secondario']?>;
     }
+
+    /* Password Manager */
+    .password-field {
+        font-family: monospace;
+    }
+
+    .card {
+        background-color: <?=$colors['sfondo2']?>;
+        border: 1px solid <?=$colors['sfondo']?>;
+        margin-bottom: 20px;
+    }
+
+    .card-header {
+        background-color: <?=$colors['sfondo']?>;
+        border-bottom: 1px solid <?=$colors['sfondo2']?>;
+        color: <?=$colors['secondario']?>;
+    }
+
+    .btn-group .btn {
+        margin-right: 2px;
+    }
+
+    .input-group-append .btn {
+        border-left: 0;
+    }
+
+    .modal-content {
+        background-color: <?=$colors['sfondo2']?>;
+        color: <?=$colors['principale']?>;
+    }
+
+    .modal-header {
+        background-color: <?=$colors['sfondo']?>;
+        border-bottom: 1px solid <?=$colors['sfondo2']?>;
+    }
+
+    .modal-footer {
+        background-color: <?=$colors['sfondo']?>;
+        border-top: 1px solid <?=$colors['sfondo2']?>;
+    }
     </style>
 </head>
 
 <body>
-    <div class="container p-5">
+    <div class="container p-1 p-md-5">
         <div class="row">
             <div class="col-md-2" style="text-align:center">
                 <?php if (!empty($logo)) { ?>
@@ -144,7 +174,7 @@
                 <h3><?= strtoUpper($description) ?></h3>
             </div>
             <div class="col-md-3">
-                <?php getMenu(); ?>
+                <?= getMenu()?>
             </div>
         </div>
         <hr>
@@ -169,18 +199,20 @@
         </div>
         <div class="row">
             <div class="col-md-9 p-2">
-                <?php getPage();?>
+                <?= getPage()?>
             </div>
             <div class="col-md-3 p-2">
-                <?php 
-                getSidebar(); 
-                ?>
+                <?= getSidebar()?>
             </div>
         </div>
     </div>
+    <script src="https://kit.fontawesome.com/493966b2aa.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <script src="assets/scripts.js"></script>
 </body>
 
 </html>
+<?php
+ob_end_flush();
+?>

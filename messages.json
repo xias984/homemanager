@@ -158,5 +158,75 @@
         "id": 32,
         "message": "Transazione creata con successo",
         "style": "success"
+    },
+    {
+        "id": 33,
+        "message": "Metodo di pagamento per Finance Manager creato con successo",
+        "style": "success"
+    },
+    {
+        "id": 34,
+        "message": "Metodo di pagamento per Finance Manager rimossa",
+        "style": "primary"
+    },
+    {
+        "id": 35,
+        "message": "Metodo di pagamento per Finance Manager modificato con successo",
+        "style": "success"
+    },
+    {
+        "id": 36,
+        "message": "Transazione pagata con successo",
+        "style": "primary"
+    },
+    {
+        "id": 37,
+        "message": "Servizio creato con successo",
+        "style": "success"
+    },
+    {
+        "id": 38,
+        "message": "Servizio modificato con successo",
+        "style": "success"
+    },
+    {
+        "id": 39,
+        "message": "Servizio eliminato con successo",
+        "style": "primary"
+    },
+    {
+        "id": 40,
+        "message": "Password aggiunta con successo",
+        "style": "success"
+    },
+    {
+        "id": 41,
+        "message": "Password modificata con successo",
+        "style": "success"
+    },
+    {
+        "id": 42,
+        "message": "Password eliminata con successo",
+        "style": "primary"
+    },
+    {
+        "id": 43,
+        "message": "Transazione eliminata con successo",
+        "style": "primary"
+    },
+    {
+        "id": 44,
+        "message": "Transazione modificata con successo",
+        "style": "success"
+    },
+    {
+        "id": 45,
+        "message": "Errore nella modifica della transazione",
+        "style": "danger"
+    },
+    {
+        "id": 46,
+        "message": "Errore nella registrazione della transazione/rata",
+        "style": "danger"
     }
 ]

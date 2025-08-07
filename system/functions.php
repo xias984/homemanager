@@ -3,6 +3,8 @@ session_start();
 $messages = file_get_contents('messages.json');
 $messages = json_decode($messages, true);
 
+
+
 function redirect($page, $dest = null) {
     // Se la variabile session è attiva su loggedIn redireziona sulla pagina richiesta oppure su dashboard
     if (!empty($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
@@ -42,6 +44,8 @@ function getPage()
             case 'newtransaction':
             case 'financeprospect':
             case 'financepayment':
+            case 'analisipwb':
+            case 'passwordmanager':
                 redirect('login', $page);
                 break;
             case 'listusers':
@@ -121,5 +125,91 @@ function dump(...$params) {
 function dd(...$params) {
     debugPrint(...$params);
     exit();
+}
+
+$monthsList = array(
+    '01' => array('January','Gennaio'),
+    '02' => array('February','Febbraio'),
+    '03' => array('March','Marzo'),
+    '04' => array('April','Aprile'),
+    '05' => array('May','Maggio'),
+    '06' => array('June','Giugno'),
+    '07' => array('July','Luglio'),
+    '08' => array('August','Agosto'),
+    '09' => array('September','Settembre'),
+    '10' => array('October','Ottobre'),
+    '11' => array('November','Novembre'),
+    '12' => array('December','Dicembre')
+    );
+
+/**
+ * Ottiene il nome del mese in italiano
+ * @param string $monthNumber Numero del mese (01-12)
+ * @return string Nome del mese in italiano
+ */
+function getMonthName($monthNumber) {
+    global $monthsList;
+    return isset($monthsList[$monthNumber]) ? $monthsList[$monthNumber][1] : '';
+}
+
+/**
+ * Ottiene il nome del mese in inglese
+ * @param string $monthNumber Numero del mese (01-12)
+ * @return string Nome del mese in inglese
+ */
+function getMonthNameEnglish($monthNumber) {
+    global $monthsList;
+    return isset($monthsList[$monthNumber]) ? $monthsList[$monthNumber][0] : '';
+}
+
+/**
+ * Crea un array di mesi con anno per i filtri
+ * @param array $data Array di dati con date
+ * @param string $dateField Campo contenente la data
+ * @return array Array associativo con formato 'm-Y' => 'Mese Anno'
+ */
+function createMonthsWithYear($data, $dateField = 'paymentdate') {
+    global $monthsList;
+    
+    $monthYearArray = [];
+    foreach ($data as $item) {
+        $monthYearArray[] = date('m-Y', strtotime($item[$dateField]));
+    }
+    $monthYears = array_unique($monthYearArray);
+    
+    $monthsWithNames = [];
+    foreach ($monthYears as $monthYear) {
+        list($month, $year) = explode('-', $monthYear);
+        $monthName = getMonthName($month);
+        $shortYear = substr($year, -2);
+        $monthsWithNames[$monthYear] = $monthName . ' ' . $shortYear;
+    }
+    
+    return $monthsWithNames;
+}
+
+function fetchDataFromApi($url) {
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $response = curl_exec($ch);
+
+    if ($response === false) {
+        $error = curl_error($ch);
+        curl_close($ch);
+        return "cURL Error: $error";
+    }
+
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    if (json_last_error() === JSON_ERROR_NONE) {
+        return $data;
+    } else {
+        return "Error decoding JSON: " . json_last_error_msg();
+    }
 }
 ?>

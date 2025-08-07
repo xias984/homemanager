@@ -1,5 +1,6 @@
 <?php
 require("./finance/model/Category.class.php");
+require("./finance/model/PaymentType.class.php");
 require("./auth/model/Auth.class.php");
 require("./finance/model/Finance.class.php");
 
@@ -9,6 +10,7 @@ class FinanceController
         $this->iduser = $_SESSION['iduser'];
         $this->datetime = date('Y-m-d H:i:s');
         $this->category = new Category();
+        $this->paymentType = new PaymentType();
         $this->finance = new Finance();
         $this->user = new Auth();
     }
@@ -81,28 +83,198 @@ class FinanceController
         $categoriesArray = array();
 
         foreach ($this->category->getCategory() as $value) {
-            $categoriesArray[] = array(
-                "id" => $value['id'],
-                "category" => $value['category']
-            );
+            $categoriesArray[$value['id']] = $value['category'];
         }
         return $categoriesArray;
     }
 
-    public function registerAmount($amountData) {
-        if (!empty($amountData)) {
-            $amountArray = array(
-                "iduser" => $amountData['iduser'],
-                "typeamount" => $amountData['typeamount'],
-                "amount" => $amountData['amount'],
-                "description" => $amountData['description'],
-                "categoryid" => $amountData['categoryid'],
-                "paymentdate" => $amountData['paymentdate']
+    public function registerPaymentType($paymentType) {
+        if (!empty($paymentType)) {
+            $paymentTypeArray = array(
+                "paymenttype"  => strtoupper($paymentType),
+                "iduser"    => $this->iduser,
+                "date"      => $this->datetime
             );
 
-            $this->finance->createTransaction($amountArray);
+            $this->paymentType->createPaymentType($paymentTypeArray);
 
-            header("Location: " . refreshPage() . "&idmsg=32");
+            header("Location: " . refreshPage() . "&idmsg=33");
+        }
+    }
+
+    public function selectPaymentTypes() {
+        $categoriesArray = array();
+
+        foreach ($this->paymentType->getPaymentTypes() as $value) {
+            $categoriesArray[$value['id']] = $value['paymenttype'];
+        }
+        return $categoriesArray;
+    }
+
+    public function listPaymentTypeTable() {
+        $paymentTypeList = array(
+            array('Metodo di pagamento', 'Inserito da', 'Data inserimento', 'Actions') // Intestazione
+        );
+
+        $paymentTypeArray = array();
+
+        if ($this->paymentType->getPaymentTypes()) {
+            $paymentTypeData = $this->paymentType->getPaymentTypes();
+            foreach ($paymentTypeData as $paymentType) {
+                $paymentTypeArray[] = [
+                    $paymentType['paymenttype'],
+                    ucfirst($this->user->getInfoUserById($paymentType['iduser'])['firstname']),
+                    date('d/m/Y', strtotime($paymentType['datainserimento'])),
+                    $paymentType['id']
+                ];
+            }
+        }
+        $paymentTypeArray = array_merge($paymentTypeList, $paymentTypeArray);
+
+        return $paymentTypeArray;
+    }
+
+    public function removePaymentType($paymentTypeId) {
+        if (!empty($paymentTypeId) && isset($paymentTypeId)) {
+            if ($this->paymentType->deletePaymentTypeById($paymentTypeId)) {
+                header("Location: " . refreshPage() . "&idmsg=34");
+            }
+        }
+    }
+
+    public function editPaymentType($paymentTypeId, $paymentTypePost) {
+        $paymentTypeArray = array();
+
+        if (!empty($paymentTypeId)) {
+            $paymentTypeData = $this->paymentType->getPaymentTypeById($paymentTypeId);
+
+            $paymentTypeArray = array(
+                "id"            =>  $paymentTypeData['id'],
+                "paymenttype"   =>  strtoupper($paymentTypePost[0]),
+                "userid"        =>  $this->iduser,
+                "datamodifica"  =>  $this->datetime
+            );
+            
+            if ($this->paymentType->updatePaymentTypeById($paymentTypeArray)) {
+                header("Location: " . refreshPage() . "&idmsg=31");
+            }
+        }
+    }
+
+    public function registerAmount($amountData) {
+        if (!empty($amountData)) {
+            $iduser = $amountData['iduser'] ?? null;
+            $typeamount = $amountData['typeamount'] ?? null;
+            $amount = $amountData['amount'] ?? null;
+            $description = $amountData['description'] ?? null;
+            $categoryid = $amountData['categoryid'] ?? null;
+            $paymenttypeid = $amountData['paymenttypeid'] ?? null;
+            $paymentdate = $amountData['paymentdate'] ?? null;
+            
+            // Verifica se è una transazione rateizzata
+            $installment = isset($amountData['installment']) && $amountData['installment'] === '1'; // La checkbox invia '1' se selezionata
+            $installmentEndDate = $amountData['installmentenddate'] ?? null;
+            if ($installment && !empty($installmentEndDate)) {
+                $success = $this->finance->registerInstallmentAmount(
+                    $iduser,
+                    $typeamount,
+                    $amount,
+                    $description,
+                    $categoryid,
+                    $paymenttypeid,
+                    $paymentdate,
+                    $installmentEndDate
+                );
+            } else {
+                $amountArray = array(
+                    "iduser" => $iduser,
+                    "typeamount" => $typeamount,
+                    "amount" => $amount ?: 0,
+                    "description" => $description,
+                    "categoryid" => $categoryid,
+                    "paymenttypeid" => $paymenttypeid,
+                    "paymentdate" => $paymentdate ?: date("Y-m-d H:i:s"),
+                    "installment_end_date" => null
+                );
+                $success = $this->finance->createTransaction($amountArray);
+            }
+
+            if ($success) {
+                header("Location: " . refreshPage() . "&idmsg=32");
+            } else {
+                header("Location: " . refreshPage() . "&idmsg=46");
+            }
+        }
+    }
+
+    public function selectFinances($filters = null) {
+        $financesArray = array();
+
+        foreach ($this->finance->getTransactions($filters) as $value) {
+            $financesArray[] = array(
+                "id" => $value['id'],
+                "user" => $this->user->getInfoUserById($value['userid'])['firstname'],
+                "type" => $value['type'],
+                "amount" => $value['amount'],
+                "description" => $value['description'],
+                "category" => isset($value['categoryid']) ? ($this->category->getCategoryById($value['categoryid'])['category'] ?? 'ND') : 'ND',
+                "paymenttype" => isset($value['paymenttypeid']) ? ($this->paymentType->getPaymentTypeById($value['paymenttypeid'])['paymenttype'] ?? 'ND') : 'ND',
+                "paymentdate" => $value['paymentdate'],
+                "payed" => $value['payed']
+            );
+        }
+        return $financesArray;
+    }
+/*
+    public function editUser($userPost) {
+        if (!empty($this->userData['editid']) && isset($this->userData['editid'])) {
+            $userPost[3] = !empty($userPost[3]) ? 1 : 0;
+            
+            if ($this->user->updateUserById($this->userData['editid'], $userPost)) {
+                header("Location: " . refreshPage() . "&idmsg=26");
+            }
+        }
+    }*/
+    public function editTransaction($financeId) {
+        if (!empty($financeId) && isset($financeId)) {
+            $transaction = $this->finance->getTransactionById($financeId);
+            return $transaction;
+        }
+    }
+
+    public function updateTransaction($financeId, $transactionData) {
+        if (!empty($financeId) && isset($financeId) && !empty($transactionData)) {
+            $updateArray = array(
+                "id" => $financeId,
+                "type" => $transactionData['type'],
+                "amount" => $transactionData['amount'],
+                "description" => $transactionData['description'],
+                "categoryid" => $transactionData['categoryid'],
+                "paymenttypeid" => $transactionData['paymenttypeid'],
+                "paymentdate" => $transactionData['paymentdate']
+            );
+            
+            if ($this->finance->updateTransactionById($updateArray)) {
+                header("Location: " . refreshPage() . "&idmsg=44#table-container");
+            } else {
+                header("Location: " . refreshPage() . "&idmsg=45#table-container");
+            }
+        }
+    }
+
+    public function deleteTransaction($financeId) {
+        if (!empty($financeId) && isset($financeId)) {
+            if ($this->finance->deleteTransactionById($financeId)) {
+                header("Location: " . refreshPage() . "&idmsg=43#table-container");
+            }
+        }
+    }
+
+    public function payTransaction($financeId) {
+        if (!empty($financeId) && isset($financeId)) {
+            if ($this->finance->updatePayTransaction($financeId)) {
+                header("Location: " . refreshPage() . "&idmsg=36#table-container");
+            }
         }
     }
 }

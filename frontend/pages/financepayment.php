@@ -1,18 +1,32 @@
-<div class="title">
-    <h3>Metodi di pagamento</h3>
-</div>
+<?php
+require("./finance/controller/FinanceController.class.php");
+
+$paymenttype = new FinanceController();
+$paymenttypeData = $paymenttype->listPaymentTypeTable();
+
+if (!empty($_POST['paymenttype'])) {
+    $paymenttype->registerPaymentType($_POST['paymenttype']);
+}
+
+if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
+    $paymenttype->removePaymentType($_GET['deleteid']);
+} else if (!empty($_GET['editid'])) {
+    if (!empty($_POST) && isset($_POST)) {
+        $paymenttype->editPaymentType($_GET['editid'], $_POST);
+    }
+}
+?>
+<?= Component::createTitle('Metodi di pagamento') ?>
 
 <form action="" method="post">
     <div class="row">
         <div class="col-md-3">
         </div>
         <div class="col-md-6">
-            <div class="form-group">
-                <input type="text" name="category" class="form-control" placeholder="Aggiungi metodo di pagamento" required>
-            </div>
+            <?= Component::createInputText('paymenttype', '', '', 'Aggiungi metodo di pagamento', true) ?>
         </div>
         <div class="col-md-3">
-            <button type="submit" class="btn btn-primary">Inserisci</button>
+            <?= Component::createSubmitButton('Inserisci', 'primary') ?>
         </div>
     </div>
 </form>
@@ -25,22 +39,22 @@
         <table class="table responsive" style="text-align:center">
             <thead>
                 <tr>
-                <?php foreach ($categoryData[0] as $header) { ?>
+                    <?php foreach ($paymenttypeData[0] as $header) { ?>
                     <th scope="col"><?=$header?></th>
-                <?php }?>
+                    <?php }?>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach (array_slice($categoryData, 1) as $category):
-                    if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $category[3]) {
-                        echo '<form action="" method="post" id="editcategory">';
+                <?php foreach (array_slice($paymenttypeData, 1) as $paymenttype):
+                    if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $paymenttype[3]) {
+                        echo '<form action="" method="post" id="editpaymenttype">';
                     }
                 ?>
                 <tr>
-                    <?php foreach ($category as $key => $value) {
+                    <?php foreach ($paymenttype as $key => $value) {
                         echo '<td>';
                         if ($key == 0) {
-                            if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $category[3]) {
+                            if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $paymenttype[3]) {
                                 echo '<input type="text" value="' . $value . '" name="' . $key . '">';
                             } else {
                                 echo '<strong>' . $value . '</strong>';
@@ -48,19 +62,19 @@
                         }else if ($key == 1 || $key == 2) {
                             echo $value;
                         } else if ($key == 3) {
-                            if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $category[3]) {
-                                echo '<a href="#" onclick="document.getElementById(\'editcategory\').submit();">Conferma</a> - ' .
-                                    '<a href="'.refreshPage().'">Chiudi</a>';
+                            if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $paymenttype[3]) {
+                                echo '<a href="#" onclick="document.getElementById(\'editpaymenttype\').submit();"><i class="fa-solid fa-check"></i></a> ' .
+                                    '<a href="'.refreshPage().'"><i class="fa-solid fa-xmark"></i></a>';
                             } else {
-                                echo '<a href="index.php?page=financecategory&editid=' . $value . '">Modifica</a> - 
-                                <a href="index.php?page=financecategory&deleteid=' . $value . '">Cancella</a>';
+                                echo '<a href="index.php?page=financepayment&editid=' . $value . '"><i class="fa-regular fa-pen-to-square"></i></a> 
+                                <a href="index.php?page=financepayment&deleteid=' . $value . '"><i class="fa-solid fa-trash-can"></i></a>';
                             }
                         }
                         echo '</td>';
                     }?>
                 </tr>
                 <?php 
-                if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $category[3]) {
+                if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $paymenttype[3]) {
                     echo '</form>';
                 }
                 endforeach; ?>

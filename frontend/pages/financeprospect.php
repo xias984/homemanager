@@ -1,78 +1,94 @@
 <?php
+require("./finance/controller/FinanceController.class.php");
+global $monthsList;
+global $colors;
+
+if (isset($_POST['reset'])) {
+    $_POST = array();
+}
+
+$finances = new FinanceController();
+
+// Genera sempre tutti i mesi disponibili dal database (senza filtri)
+$allFinances = $finances->selectFinances();
+$monthsWithNames = createMonthsWithYear($allFinances, 'paymentdate');
+
+// Ora applica i filtri per i dati da mostrare
+$financesArray = $finances->selectFinances($_POST);
+$categories = $finances->selectCategories();
+$paymenttypes = $finances->selectPaymentTypes();
+
+$amountTot = [
+    'E' => ['done' => 0, 'notdone' => 0],
+    'U' => ['done' => 0, 'notdone' => 0]
+];
+foreach ($financesArray as $value) {
+    if ($value['payed'] == 1) {
+        $amountTot[$value['type']]['done'] += $value['amount'];
+    } else {
+        $amountTot[$value['type']]['notdone'] += $value['amount'];
+    }
+}
+
+// Calcola i totali
+$totalEntrate = $amountTot['E']['done'] + $amountTot['E']['notdone'];
+$totalUscite = $amountTot['U']['done'] + $amountTot['U']['notdone'];
+$totalPagato = $amountTot['E']['done'] - $amountTot['U']['done'];
+$totalNonPagato = $amountTot['E']['notdone'] - $amountTot['U']['notdone'];
+$totalComplessivo = $totalEntrate - $totalUscite;
+
+// Gestione edit inline
+if (!empty($_GET['edittransaction']) && isset($_GET['edittransaction'])) {
+    if (!empty($_POST) && isset($_POST)) {
+        $finances->updateTransaction($_GET['edittransaction'], $_POST);
+    }
+}
+
+if (isset($_GET['deletetransaction']) && !empty($_GET['deletetransaction'])) {
+    $finances->deleteTransaction($_GET['deletetransaction']);
+}
+
+if (isset($_GET['payid']) && !empty($_GET['payid'])) {
+    $finances->payTransaction($_GET['payid']);
+}
 ?>
-<div class="title">
-    <h3>Prospetto Entrate/Uscite</h3>
-</div>
+
+<?= Component::createTitle('Prospetto Entrate/Uscite') ?>
+
 <div class="row">
     <div class="col-md-12" style="text-align:center">
         <h5>Filtri ricerca</h5>
+        <form action="" method="post" id="filterform">
         <div class="chat-box p-3">
             <div class="row">
                 <div class="col-md-10">
-                    <div class="form-group">
-                        <input class="form-control" type="textbox" placeholder="Cerca...">
-                    </div>
+                    <?= Component::createInputText('searchbox', '', '', isset($_POST['searchbox']) && !empty($_POST['searchbox']) ? $_POST['searchbox'] : 'Cerca nelle note...') ?>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2" style="text-align:left">
                     <div class="form-group">
-                        <input class="form-check-input" type="checkbox" name="payed"> Pagato ?
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="chat-box p-3">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="Utente">Utente:</label>
-                        <select class="form-control" name="Utente" style="flex:1;" multiple>
-                            <option>Daniel Costarelli</option>
-                            <option>Bernadette Giordano</option>
-                            <option>Martina Costarelli</option>
-                            <option>Leonardo Costarelli</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="Utente">Categoria:</label>
-                        <select class="form-control" name="Utente" style="flex:1;" multiple>
-                            <option>Auto</option>
-                            <option>Affitto</option>
-                            <option>Stipendio</option>
-                            <option>Prestiti</option>
-                            <option>Pensione</option>
-                        </select>
+                        <input class="form-check-input" type="checkbox" name="payed" <?= isset($_POST['payed']) ? 'checked' : '' ?>> Pagato<br>
+                        <input class="form-check-input" type="checkbox" name="notpayed" <?= isset($_POST['notpayed']) ? 'checked' : '' ?>> Non Pagato
                     </div>
                 </div>
             </div>
         </div>
         <div class="chat-box p-3">
             <div class="row">
-                <div class="col-md-6"><div class="form-group">
-                        <label for="lasttransactions">Ultimi movimenti:</label>
-                        <select class="form-control" name="lasttransactions" style="flex:1;">
-                            <option>Ultimi 10 giorni</option>
-                            <option>Ultimo mese</option>
-                            <option>Ultimi 3 mesi</option>
-                            <option>Ultimi 6 mesi</option>
-                            <option>Ultimo anno</option>
-                        </select>
-                    </div></div>
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="periodo">Periodo:</label>
-                        <select class="form-control" name="periodo" style="flex:1;">
-                            <option>Novembre</option>
-                            <option>Ottobre</option>
-                            <option>Settembre</option>
-                            <option>Agosto</option>
-                            <option>Luglio</option>
-                            <option>Giugno</option>
-                            <option>Maggio</option>
-                            <option>Aprile</option>
-                        </select>
-                    </div>
+                    <?= Component::createInputSelect('paymenttypeid[]', 'Modalità di pagamento', $paymenttypes, false, true) ?>
+                </div>
+                <div class="col-md-6">
+                    <?= Component::createInputSelect('categoryid[]', 'Categoria', $categories, false, true) ?>
+                </div>
+            </div>
+        </div>
+        <div class="chat-box p-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <?= Component::createInputSelect('types[]', 'Entrate/Uscite', ['E' => 'Entrate', 'U' => 'Uscite'], false, true) ?>
+                </div>
+                <div class="col-md-6">
+                    <?= Component::createInputSelect('periodo[]', 'Periodo', $monthsWithNames, false, true, false, true) ?>
                 </div>
             </div>
         </div>
@@ -83,116 +99,141 @@
                     <input type="submit" class="form-control btn btn-primary" value="CERCA" style="width:30%;float:right">
                 </div>
                 <div class="col-md-6">
-                    <input type="submit" class="form-control" value="RESET" style="width:30%;float:left">
+                    <input type="submit" class="form-control" name="reset" value="RESET" style="width:30%;float:left">
                 </div>
             </div>
         </div>
+        </form>
     </div>
 </div>
+
 <div>&nbsp;</div>
-<div class="row">
-    <div class="col-md-6" style="overflow-x: auto;">
-        <h5>Entrate</h5>
-        <table class="table responsive">
-            <thead>
+
+<div class="col-md-12" id="table-container" style="text-align:center; overflow-x: auto;">
+    <table class="table responsive">
+        <thead>
             <tr>
                 <th scope="col">Data pagamento</th>
-                <th scope="col">Inserito da:</th>
+                <th scope="col">Tipo</th>
                 <th scope="col">Categoria</th>
+                <th scope="col">Modalità di pagamento</th>
                 <th scope="col">Importo</th>
-                <th scope="col">Note:</th>
+                <th scope="col">Note</th>
                 <th scope="col">Actions</th>
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        <tbody>
+            <?php foreach($financesArray as $financeValue) { 
+                if (!empty($_GET['edittransaction']) && isset($_GET['edittransaction']) && $_GET['edittransaction'] == $financeValue['id']) {
+                    echo '<form action="" method="post" id="edittransaction">';
+                }
+            ?>
+            <tr <?php if (empty($financeValue['payed'])) { echo " style=\"color: " . $colors['subtitle'] . "\""; } ?>>
+                <td>
+                    <?php if (!empty($_GET['edittransaction']) && isset($_GET['edittransaction']) && $_GET['edittransaction'] == $financeValue['id']) { ?>
+                        <input type="date" name="paymentdate" value="<?= date('Y-m-d', strtotime($financeValue['paymentdate'])) ?>" class="form-control">
+                    <?php } else { ?>
+                        <?= date('d/m/Y', strtotime($financeValue['paymentdate'])) ?>
+                    <?php } ?>
+                </td>
+                <td>
+                    <?php if (!empty($_GET['edittransaction']) && isset($_GET['edittransaction']) && $_GET['edittransaction'] == $financeValue['id']) { ?>
+                        <select name="type" class="form-control">
+                            <option value="E" <?= $financeValue['type'] == 'E' ? 'selected' : '' ?>>Entrata</option>
+                            <option value="U" <?= $financeValue['type'] == 'U' ? 'selected' : '' ?>>Uscita</option>
+                        </select>
+                    <?php } else { ?>
+                        <?= $financeValue['type'] == 'E' ? 'Entrata' : 'Uscita' ?>
+                    <?php } ?>
+                </td>
+                <td>
+                    <?php if (!empty($_GET['edittransaction']) && isset($_GET['edittransaction']) && $_GET['edittransaction'] == $financeValue['id']) { ?>
+                        <select name="categoryid" class="form-control">
+                            <?php foreach ($categories as $catId => $catName) { ?>
+                                <option value="<?= $catId ?>" <?= $financeValue['category'] == $catName ? 'selected' : '' ?>>
+                                    <?= $catName ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    <?php } else { ?>
+                        <?= $financeValue['category'] ?>
+                    <?php } ?>
+                </td>
+                <td>
+                    <?php if (!empty($_GET['edittransaction']) && isset($_GET['edittransaction']) && $_GET['edittransaction'] == $financeValue['id']) { ?>
+                        <select name="paymenttypeid" class="form-control">
+                            <?php foreach ($paymenttypes as $payId => $payName) { ?>
+                                <option value="<?= $payId ?>" <?= $financeValue['paymenttype'] == $payName ? 'selected' : '' ?>>
+                                    <?= $payName ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    <?php } else { ?>
+                        <?= $financeValue['paymenttype'] ?>
+                    <?php } ?>
+                </td>
+                <td style="text-align:right">
+                    <?php if (!empty($_GET['edittransaction']) && isset($_GET['edittransaction']) && $_GET['edittransaction'] == $financeValue['id']) { ?>
+                        <input type="number" name="amount" value="<?= $financeValue['amount'] ?>" class="form-control" step="0.01">
+                    <?php } else { ?>
+                        <span style="color:<?= $financeValue['payed'] ? $financeValue['type'] == 'U' ? 'red' : 'lightgreen' : $colors['subtitle']?>">
+                            <?= $financeValue['amount'] ?> €
+                        </span>
+                    <?php } ?>
+                </td>
+                <td>
+                    <?php if (!empty($_GET['edittransaction']) && isset($_GET['edittransaction']) && $_GET['edittransaction'] == $financeValue['id']) { ?>
+                        <input type="text" name="description" value="<?= htmlspecialchars($financeValue['description']) ?>" class="form-control">
+                    <?php } else { ?>
+                        <?= $financeValue['description'] ?>
+                    <?php } ?>
+                </td>
+                <td>
+                    <?php if (!empty($_GET['edittransaction']) && isset($_GET['edittransaction']) && $_GET['edittransaction'] == $financeValue['id']) { ?>
+                        <a href="#" onclick="document.getElementById('edittransaction').submit();">
+                            <i class="fa-solid fa-check"></i>
+                        </a>&nbsp;
+                        <a href="<?= refreshPage() ?>#table-container">
+                            <i class="fa-solid fa-xmark"></i>
+                        </a>
+                    <?php } else { ?>
+                        <a href="<?=refreshPage()?>&payid=<?=$financeValue['id']?>#table-container" alt="Paga">
+                            <i class="fa-solid fa-cash-register"></i>
+                        </a>&nbsp;
+                        <a href="<?=refreshPage()?>&edittransaction=<?=$financeValue['id']?>#table-container">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </a>&nbsp;
+                        <a href="<?=refreshPage()?>&deletetransaction=<?=$financeValue['id']?>#table-container">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                    <?php } ?>
+                </td>
+            </tr>
+            <?php 
+                if (!empty($_GET['edittransaction']) && isset($_GET['edittransaction']) && $_GET['edittransaction'] == $financeValue['id']) {
+                    echo '</form>';
+                }
+            } ?>
+        </tbody>
+        <tfoot>
             <tr>
-                <td>1/11/2023</td>
-                <td>Bernadette Giordano</td>
-                <td>Pensione</td>
-                <td style="color:green; text-align:right"><strong>+280,00 €</strong></td>
-                <td>Invalidità Marty</td>
-                <td><a href="#">Modifica</a> - <a href="#">Cancella</a></td>
+                <th colspan="6">Totale Pagato</th>
+                <th scope="col" style="color: <?= $totalPagato >= 0 ? 'lightgreen' : 'red' ?>">
+                    <?= number_format($totalPagato, 2) ?>€
+                </th>
             </tr>
             <tr>
-                <td>10/11/2023</td>
-                <td>Daniel Costarelli</td>
-                <td>Stipendio</td>
-                <td style="color:green; text-align:right"><strong>+2.333,00 €</strong></td>
-                <td>Stipendio Nextar</td>
-                <td><a href="#">Modifica</a> - <a href="#">Cancella</a></td>
+                <th colspan="6">Totale Non Pagato</th>
+                <th scope="col" style="color: <?= $colors['subtitle'] ?>">
+                    <?= number_format($totalNonPagato, 2) ?>€
+                </th>
             </tr>
-            <tr style="color:grey">
-                <td>22/11/2023</td>
-                <td>Bernadette Giordano</td>
-                <td>Pensione</td>
-                <td style="text-align:right">+470,00 €</td>
-                <td>Assegno unico</td>
-                <td><a href="#">Modifica</a> - <a href="#">Cancella</a></td>
-            </tr>
-            </tbody>
-            <tfoot>
             <tr>
-                <td colspan="3"><strong>TOTALE</strong> (previsione)</td>
-                <td style="color:green; text-align:right"><strong>+2.613,00 €</strong></td>
-                <td colspan="2" style="color:grey">(+3.083,00 €)</td>
+                <th colspan="6"><strong>Totale Complessivo</strong></th>
+                <th scope="col" style="color: <?= $totalComplessivo >= 0 ? 'lightgreen' : 'red' ?>; font-weight: bold;">
+                    <?= number_format($totalComplessivo, 2) ?>€
+                </th>
             </tr>
-            </tfoot>
-        </table>
-    </div>
-    <div class="col-md-6" style="overflow-x: auto;">
-        <h5>Uscite</h5>
-        <table class="table responsive">
-            <thead>
-            <tr>
-                <th scope="col">Data pagamento</th>
-                <th scope="col">Inserito da:</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Importo</th>
-                <th scope="col">Note:</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>4/11/2023</td>
-                <td>Daniel Costarelli</td>
-                <td>Auto</td>
-                <td style="color:red; text-align:right"><strong>-233,00 €</strong></td>
-                <td>Rata macchina</td>
-                <td><a href="#">Modifica</a> - <a href="#">Cancella</a></td>
-            </tr>
-            <tr style="color:grey">
-                <td>12/11/2023</td>
-                <td>Daniel Costarelli</td>
-                <td>Prestiti</td>
-                <td style="text-align:right">-800,00 €</td>
-                <td>Carta di credito</td>
-                <td><a href="#">Modifica</a> - <a href="#">Cancella</a></td>
-            </tr>
-            <tr style="color:grey">
-                <td>12/11/2023</td>
-                <td>Daniel Costarelli</td>
-                <td>Affitto</td>
-                <td style="text-align:right">-630,00 €</td>
-                <td></td>
-                <td><a href="#">Modifica</a> - <a href="#">Cancella</a></td>
-            </tr>
-            <tr style="color:grey">
-                <td>22/11/2023</td>
-                <td>Daniel Costarelli</td>
-                <td>Prestito</td>
-                <td style="text-align:right">-203,00 €</td>
-                <td>Hype</td>
-                <td><a href="#">Modifica</a> - <a href="#">Cancella</a></td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="3"><strong>TOTALE</strong> (previsione)</td>
-                <td style="color:green; text-align:right"><strong>+2.380,00 €</strong></td>
-                <td colspan="2" style="color:grey">(+1.217,00 €)</td>
-            </tr>
-            </tfoot>
-        </table>
-    </div>
+        </tfoot>
+    </table>
 </div>

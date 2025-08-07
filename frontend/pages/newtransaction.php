@@ -3,49 +3,29 @@ require("./finance/controller/FinanceController.class.php");
 
 $finance = new FinanceController();
 $categories = $finance->selectCategories();
-
+$paymenttypes = $finance->selectPaymentTypes();
 if (!empty($_POST)) {
     $finance->registerAmount($_POST);
 }
 ?>
-
-<div class="title">
-    <h3>Registra Transazione</h3>
-</div>
+<?= Component::createTitle('Registra Transazione') ?>
 <div class="row">
     <div class="col-md-3">
     </div>
     <div class="col-md-6">
         <form action="" method="post">
-            <input type="hidden" name="iduser" value="<?=$_SESSION['iduser']?>">
-            <div class="form-group">
-                <label for="typeamount">Tipo importo:</label>
-                <select class="form-control" name="typeamount" style="flex:1;">
-                    <option value="E">Entrata</option>
-                    <option value="U">Uscita</option>
-                </select>
+            <?= Component::createInputText('iduser', '', $_SESSION['iduser'], '', false, 'hidden'); ?>
+            <?= Component::createInputSelect('typeamount', 'Tipo importo', ['E' => 'Entrate', 'U' => 'Uscite'], false) ?>
+            <?= Component::createInputText('amount', 'Importo', '', '0', true, 'number'); ?>
+            <?= Component::createCheckbox('installment', 'Rata', false, 'installmentCheckbox'); ?>
+            <div id="installmentEndDateContainer" style="display: none;">
+                <?= Component::createInputText('installmentenddate', 'Data di estinzione rata', '', '', true, 'date'); ?>
             </div>
-            <div class="form-group">
-                <label for="amount">Importo:</label>
-                <input type="number" class="form-control" name="amount" placeholder="0" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Descrizione:</label>
-                <input type="text" class="form-control" name="description" required>
-            </div>
-            <div class="form-group">
-                <label for="categoryid">Categoria:</label>
-                <select class="form-control" name="categoryid" style="flex:1;">
-                    <?php foreach($categories as $category) { dump($category);?>
-                    <option value="<?=$category['id']?>"><?=$category['category']?></option>
-                    <?php } ?>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="data">Data di pagamento:</label>
-                <input type="date" class="form-control" name="paymentdate">
-            </div>
-            <button type="submit" class="btn btn-primary">Accedi</button>
+            <?= Component::createInputText('description', 'Descrizione', '', ''); ?>
+            <?= Component::createInputSelect('categoryid', 'Categoria', $categories, false); ?>
+            <?= Component::createInputSelect('paymenttypeid', 'Modalità di pagamento', $paymenttypes, false); ?>
+            <?= Component::createInputText('paymentdate', 'Data di pagamento', '', '', true, 'date'); ?>    
+            <?= Component::createSubmitButton('Inserisci', 'secondary'); ?>
         </form>
     </div>
     <div class="col-md-3">

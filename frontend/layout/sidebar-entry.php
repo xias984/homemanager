@@ -10,12 +10,12 @@ global $colors;
                 </li>
                 <li class="nav-item">
                     <a class="nav-link cursor-pointer" href="index.php?page=dashboard">
-                        <h5>Dashboard</h5>
+                        <h5><i class="fa-solid fa-gauge"></i> Dashboard</h5>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#finance">
-                        <h5>Finance Manager</h5>
+                        <h5><i class="fa-solid fa-coins"></i> Finance Manager</h5>
                     </a>
                     <ul class="nav flex-column ml-3 collapse" id="finance">
                         <li class="nav-item">
@@ -35,21 +35,13 @@ global $colors;
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#submenu1">
-                        <h5>Password Manager</h5>
+                    <a class="nav-link cursor-pointer" href="index.php?page=passwordmanager">
+                        <h5><i class="fa-solid fa-key"></i> Password Manager</h5>
                     </a>
-                    <ul class="nav flex-column ml-3 collapse" id="submenu1">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Sottomenu 1.1</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Sottomenu 1.2</a>
-                        </li>
-                    </ul>
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#submenu2">
-                        <h5>Photo Manager</h5>
+                        <h5><i class="fa-solid fa-photo-film"></i> Photo Manager</h5>
                     </a>
                     <ul class="nav flex-column ml-3 collapse" id="submenu2">
                         <li class="nav-item">
@@ -60,10 +52,20 @@ global $colors;
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#pwb">
+                        <h5><i class="fa-brands fa-amazon"></i> PriceWatcherBot</h5>
+                    </a>
+                    <ul class="nav flex-column ml-3 collapse" id="pwb">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?page=analisipwb">Lista prodotti</a>
+                        </li>
+                    </ul>
+                </li>-->
                 <?php if (isAdmin()): ?>
                 <li class="nav-item">
                     <a class="nav-link cursor-pointer" data-toggle="collapse" data-target="#admin">
-                        <h5>Admin Manager</h5>
+                        <h5><i class="fa-solid fa-toolbox"></i> Admin Manager</h5>
                     </a>
                     <ul class="nav flex-column ml-3 collapse" id="admin">
                         <li class="nav-item">

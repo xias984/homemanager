@@ -21,21 +21,19 @@ if (!empty($_GET['editpost']) && isset($_GET['editpost'])) {
 }
 
 ?>
-<div class="title">
-    <h3>Dashboard</h3>
-</div>
+<?= Component::createTitle('Dashboard') ?>
 <div class="row">
     <div class="col-md-12">
         <div class="chat-box p-3">
             <form class="custom-form" action="" method="post">
                 <div class="message-column">
                     <div class="message">
-                        <input type="text" class="form-control" name="newpost" placeholder="Scrivi nuovo post">
+                        <?= Component::createInputText('newpost', '', '', 'Scrivi nuovo post', true) ?>
                     </div>
                 </div>
                 <div class="actions-column">
                     <div class="actions">
-                        <button type="submit" class="btn btn-primary">Invia</button>
+                        <?= Component::createSubmitButton('<i class="fa-solid fa-paper-plane"></i>', 'primary') ?>
                     </div>
                 </div>
             </form>
@@ -56,7 +54,7 @@ if (!empty($_GET['editpost']) && isset($_GET['editpost'])) {
                 </div>
                 <div class="message-text">
                 <?php if (!empty($_GET['editpost']) && ($post['id'] == $_GET['editpost'])) {
-                    echo '<input type="text" class="form-control" name="editpost" value="'.$post['post'].'">';
+                    Component::createInputText('editpost', '', $post['post'], '');
                 } else {
                     echo $post['post'];
                 } ?>
@@ -70,15 +68,15 @@ if (!empty($_GET['editpost']) && isset($_GET['editpost'])) {
                     <?php if (!empty($_GET['editpost']) && ($post['id'] == $_GET['editpost'])) {
                         echo '';
                     } else {
-                        echo '<a href="#" data-toggle="collapse" data-target="#reply'.$post['idreply'].'">Rispondi</a>';
+                        echo '<a href="#" data-toggle="collapse" data-target="#reply'.$post['idreply'].'"><i class="fa-solid fa-reply"></i></a>&nbsp;';
                     }?>
                     <?php if (($post['iduser'] === $_SESSION['iduser']) || isAdmin()): ?>
                     <?php if (!empty($_GET['editpost']) && ($post['id'] == $_GET['editpost'])) { 
-                        echo '<a href="#" onclick="document.getElementById(\'editpost\').submit();">Conferma</a><br>
-                            <a href="'.refreshPage().'">Chiudi</a>';
+                        echo '<a href="#" onclick="document.getElementById(\'editpost\').submit();"><i class="fa-solid fa-check"></i></a> 
+                            <a href="'.refreshPage().'"><i class="fa-solid fa-xmark"></i></a>';
                      } else { ?>
-                    <br><a href="index.php?page=dashboard&editpost=<?=$post['id']?>">Modifica</a>
-                    <br><a href="index.php?page=dashboard&deletepost=<?=$post['idreply']?>">Cancella</a>
+                    <a href="<?=refreshPage()?>&editpost=<?=$post['id']?>"><i class="fa-regular fa-pen-to-square"></i></a>&nbsp;
+                    <a href="<?=refreshPage()?>&deletepost=<?=$post['idreply']?>"><i class="fa-solid fa-trash-can"></i></a>
                     <?php } endif; ?>
                 </div>
             </div>
@@ -90,13 +88,13 @@ if (!empty($_GET['editpost']) && isset($_GET['editpost'])) {
             <form class="custom-form" action="" method="post">
                 <div class="message-column">
                     <div class="message-text">
-                        <input type="text" class="form-control" name="newreply" placeholder="Scrivi la tua risposta">
-                        <input type="hidden" name="idreply" value="<?= $post['idreply']?>">
+                        <?= Component::createInputText('newreply', '', '', 'Scrivi una risposta') ?>
+                        <?= Component::createInputText('idreply', '', $post['idreply'], '', false, 'hidden'); ?>
                     </div>
                 </div>
                 <div class="actions-column">
                     <div class="actions">
-                        <button type="submit" class="btn btn-primary">Invia</button>
+                        <?= Component::createSubmitButton('Invia', 'primary') ?>
                     </div>
                 </div>
             </form>
@@ -113,8 +111,8 @@ if (!empty($_GET['editpost']) && isset($_GET['editpost'])) {
                 </div>
                 <div class="answer-text">
                 <?php 
-                    if (!empty($_GET['editpost']) && ($reply['id'] == $_GET['editpost'])){?>
-                    <input type="text" class="form-control" name="editpost" value="<?=$reply['post']?>">
+                    if (!empty($_GET['editpost']) && ($reply['id'] == $_GET['editpost'])){
+                        Component::createInputText('editpost', '', $reply['post'], '') ?>
                     <?php } else { 
                         echo $reply['post'];
                     } ?>
@@ -127,11 +125,11 @@ if (!empty($_GET['editpost']) && isset($_GET['editpost'])) {
                 <div class="actions">
                 <?php if (($reply['iduser'] === $_SESSION['iduser']) || isAdmin()):?>
                     <?php if (!empty($_GET['editpost']) && ($reply['id'] == $_GET['editpost'])) {
-                        echo '<a href="#" onclick="document.getElementById(\'editpost\').submit();">Conferma</a><br>
-                            <a href="'.refreshPage().'">Chiudi</a>';
+                        echo '<a href="#" onclick="document.getElementById(\'editpost\').submit();"><i class="fa-solid fa-check"></i></a>&nbsp;
+                            <a href="'.refreshPage().'"><i class="fa-solid fa-xmark"></i></a>';
                     } else {?>
-                    <a href="index.php?page=dashboard&editpost=<?=$reply['id']?>">Modifica</a><br>
-                    <a href="index.php?page=dashboard&deletereply=<?=$reply['id']?>">Cancella</a>
+                    <a href="<?=refreshPage()?>&editpost=<?=$reply['id']?>"><i class="fa-regular fa-pen-to-square"></i></a>&nbsp;
+                    <a href="<?=refreshPage()?>&deletereply=<?=$reply['id']?>"><i class="fa-solid fa-trash-can"></i></a>
                 <?php } endif; ?>
                 </div>
             </div>

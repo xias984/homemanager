@@ -78,11 +78,13 @@ DROP TABLE IF EXISTS `finance`;
 CREATE TABLE `finance` (
   `id` int NOT NULL AUTO_INCREMENT,
   `type` enum('E','U') NOT NULL,
-  `amount` int NOT NULL,
+  `amount` float NOT NULL,
   `userid` int NOT NULL,
-  `description` varchar(100) NOT NULL,
+  `description` varchar(100) DEFAULT NULL,
   `categoryid` int NOT NULL,
-  `paymentdate` datetime NOT NULL,
+  `paymentdate` datetime NOT DEFAULT NULL,
+  `installment_end_date` date DEFAULT NULL,
+  `payed` tinyint(1) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -178,3 +180,48 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2023-11-01 16:20:29
+
+--
+-- Table structure for table `password_services`
+--
+
+DROP TABLE IF EXISTS `password_services`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `password_services` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `userid` int NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_password_services_user` (`userid`),
+  CONSTRAINT `fk_password_services_user` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `password_entries`
+--
+
+DROP TABLE IF EXISTS `password_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `password_entries` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `service_id` int NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `password` text NOT NULL,
+  `notes` text,
+  `userid` int NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_password_entries_service` (`service_id`),
+  KEY `fk_password_entries_user` (`userid`),
+  CONSTRAINT `fk_password_entries_service` FOREIGN KEY (`service_id`) REFERENCES `password_services` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_password_entries_user` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
