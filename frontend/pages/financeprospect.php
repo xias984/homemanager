@@ -11,30 +11,7 @@ $finances = new FinanceController();
 
 // Genera sempre tutti i mesi disponibili dal database (senza filtri)
 $allFinances = $finances->selectFinances();
-$monthYearArray = [];
-foreach ($allFinances as $financesValue) {
-    $monthYearArray[] = date('m-Y', strtotime($financesValue['paymentdate']));
-}
-$monthYears = array_unique($monthYearArray);
-
-// Crea array associativo con nomi dei mesi in italiano + anno
-$monthsWithNames = [];
-foreach ($monthYears as $monthYear) {
-    list($month, $year) = explode('-', $monthYear);
-    $monthName = date('F', mktime(0, 0, 0, $month, 1)); // Nome del mese in inglese
-    
-    // Converti in italiano
-    $italianMonths = [
-        'January' => 'Gennaio', 'February' => 'Febbraio', 'March' => 'Marzo',
-        'April' => 'Aprile', 'May' => 'Maggio', 'June' => 'Giugno',
-        'July' => 'Luglio', 'August' => 'Agosto', 'September' => 'Settembre',
-        'October' => 'Ottobre', 'November' => 'Novembre', 'December' => 'Dicembre'
-    ];
-    
-    $italianMonth = $italianMonths[$monthName] ?? $monthName;
-    $shortYear = substr($year, -2); // Prendi solo le ultime 2 cifre dell'anno
-    $monthsWithNames[$monthYear] = $italianMonth . ' ' . $shortYear;
-}
+$monthsWithNames = createMonthsWithYear($allFinances, 'paymentdate');
 
 // Ora applica i filtri per i dati da mostrare
 $financesArray = $finances->selectFinances($_POST);
@@ -42,12 +19,23 @@ $categories = $finances->selectCategories();
 $paymenttypes = $finances->selectPaymentTypes();
 
 $amountTot = [
-    'E' => 0,
-    'U' => 0
+    'E' => ['done' => 0, 'notdone' => 0],
+    'U' => ['done' => 0, 'notdone' => 0]
 ];
 foreach ($financesArray as $value) {
-    $amountTot[$value['type']] += $value['amount'];
+    if ($value['payed'] == 1) {
+        $amountTot[$value['type']]['done'] += $value['amount'];
+    } else {
+        $amountTot[$value['type']]['notdone'] += $value['amount'];
+    }
 }
+
+// Calcola i totali
+$totalEntrate = $amountTot['E']['done'] + $amountTot['E']['notdone'];
+$totalUscite = $amountTot['U']['done'] + $amountTot['U']['notdone'];
+$totalPagato = $amountTot['E']['done'] - $amountTot['U']['done'];
+$totalNonPagato = $amountTot['E']['notdone'] - $amountTot['U']['notdone'];
+$totalComplessivo = $totalEntrate - $totalUscite;
 
 // Gestione edit inline
 if (!empty($_GET['edittransaction']) && isset($_GET['edittransaction'])) {
@@ -229,8 +217,22 @@ if (isset($_GET['payid']) && !empty($_GET['payid'])) {
         </tbody>
         <tfoot>
             <tr>
-                <th colspan="6">Totale</th>
-                <th scope="col"><?= ($amountTot['E'] - $amountTot['U']) ?>€</th>
+                <th colspan="6">Totale Pagato</th>
+                <th scope="col" style="color: <?= $totalPagato >= 0 ? 'lightgreen' : 'red' ?>">
+                    <?= number_format($totalPagato, 2) ?>€
+                </th>
+            </tr>
+            <tr>
+                <th colspan="6">Totale Non Pagato</th>
+                <th scope="col" style="color: <?= $colors['subtitle'] ?>">
+                    <?= number_format($totalNonPagato, 2) ?>€
+                </th>
+            </tr>
+            <tr>
+                <th colspan="6"><strong>Totale Complessivo</strong></th>
+                <th scope="col" style="color: <?= $totalComplessivo >= 0 ? 'lightgreen' : 'red' ?>; font-weight: bold;">
+                    <?= number_format($totalComplessivo, 2) ?>€
+                </th>
             </tr>
         </tfoot>
     </table>

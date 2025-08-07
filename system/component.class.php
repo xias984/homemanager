@@ -38,6 +38,7 @@ class Component
         $inputAttributes = [
             'class' => 'form-control',
             'type' => $type,
+            'step' => $type == 'number' ? 'any' : null,
             'name' => $name,
             'id' => $name,
             'value' => $value,
@@ -111,7 +112,12 @@ class Component
         
         foreach ($options as $key => $value) {
             $isSelected = (!empty($selectedFields) && in_array($key, $selectedFields)) ? ' selected' : '';
-            $optionValue = $formatDates && isset($monthsList[$value]) ? $monthsList[$value] : $value;
+            
+            if ($formatDates && isset($monthsList[$value])) {
+                $optionValue = $monthsList[$value][1]; // Usa il nome italiano
+            } else {
+                $optionValue = $value;
+            }
 
             $html .= "<option value=\"$key\"$isSelected>$optionValue</option>";
         }

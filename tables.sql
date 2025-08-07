@@ -78,12 +78,12 @@ DROP TABLE IF EXISTS `finance`;
 CREATE TABLE `finance` (
   `id` int NOT NULL AUTO_INCREMENT,
   `type` enum('E','U') NOT NULL,
-  `amount` int NOT NULL,
+  `amount` float NOT NULL,
   `userid` int NOT NULL,
-  `description` varchar(100) NOT NULL,
+  `description` varchar(100) DEFAULT NULL,
   `categoryid` int NOT NULL,
-  `paymentdate` datetime NOT NULL,
-  `payed` tinyint(1) NOT NULL,
+  `paymentdate` datetime NOT DEFAULT NULL,
+  `payed` tinyint(1) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

@@ -128,19 +128,65 @@ function dd(...$params) {
 }
 
 $monthsList = array(
-    '01' => 'Gennaio',
-    '02' => 'Febbraio',
-    '03' => 'Marzo',
-    '04' => 'Aprile',
-    '05' => 'Maggio',
-    '06' => 'Giugno',
-    '07' => 'Luglio',
-    '08' => 'Agosto',
-    '09' => 'Settembre',
-    '10' => 'Ottobre',
-    '11' => 'Novembre',
-    '12' => 'Dicembre'
+    '01' => array('January','Gennaio'),
+    '02' => array('February','Febbraio'),
+    '03' => array('March','Marzo'),
+    '04' => array('April','Aprile'),
+    '05' => array('May','Maggio'),
+    '06' => array('June','Giugno'),
+    '07' => array('July','Luglio'),
+    '08' => array('August','Agosto'),
+    '09' => array('September','Settembre'),
+    '10' => array('October','Ottobre'),
+    '11' => array('November','Novembre'),
+    '12' => array('December','Dicembre')
     );
+
+/**
+ * Ottiene il nome del mese in italiano
+ * @param string $monthNumber Numero del mese (01-12)
+ * @return string Nome del mese in italiano
+ */
+function getMonthName($monthNumber) {
+    global $monthsList;
+    return isset($monthsList[$monthNumber]) ? $monthsList[$monthNumber][1] : '';
+}
+
+/**
+ * Ottiene il nome del mese in inglese
+ * @param string $monthNumber Numero del mese (01-12)
+ * @return string Nome del mese in inglese
+ */
+function getMonthNameEnglish($monthNumber) {
+    global $monthsList;
+    return isset($monthsList[$monthNumber]) ? $monthsList[$monthNumber][0] : '';
+}
+
+/**
+ * Crea un array di mesi con anno per i filtri
+ * @param array $data Array di dati con date
+ * @param string $dateField Campo contenente la data
+ * @return array Array associativo con formato 'm-Y' => 'Mese Anno'
+ */
+function createMonthsWithYear($data, $dateField = 'paymentdate') {
+    global $monthsList;
+    
+    $monthYearArray = [];
+    foreach ($data as $item) {
+        $monthYearArray[] = date('m-Y', strtotime($item[$dateField]));
+    }
+    $monthYears = array_unique($monthYearArray);
+    
+    $monthsWithNames = [];
+    foreach ($monthYears as $monthYear) {
+        list($month, $year) = explode('-', $monthYear);
+        $monthName = getMonthName($month);
+        $shortYear = substr($year, -2);
+        $monthsWithNames[$monthYear] = $monthName . ' ' . $shortYear;
+    }
+    
+    return $monthsWithNames;
+}
 
 function fetchDataFromApi($url) {
     $ch = curl_init();

@@ -69,7 +69,7 @@ $passwordsGrouped = $passwordManager->getPasswordsGroupedByService();
                     </div>
                     <div class="message-text">
                         <?= Component::createInputText('name', '', '', 'Nome servizio (es. Gmail, Facebook)', true) ?>
-                        <?= Component::createInputText('description', '', '', 'Descrizione del servizio', true) ?>
+                        <?= Component::createInputText('description', '', '', 'Descrizione del servizio') ?>
                     </div>
                 </div>
                 <div class="actions-column">
@@ -145,7 +145,7 @@ $passwordsGrouped = $passwordManager->getPasswordsGroupedByService();
                 </div>
             </div>
             
-            <div class="collapse show" id="service<?= md5($serviceName) ?>">
+            <div class="collapse" id="service<?= md5($serviceName) ?>">
                 <?php foreach ($passwords as $password): ?>
                 <div class="chat-box">
                     <?php if (!empty($_GET['editpassword']) && ($password['id'] == $_GET['editpassword'])) {

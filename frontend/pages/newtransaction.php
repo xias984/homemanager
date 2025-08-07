@@ -17,9 +17,9 @@ if (!empty($_POST)) {
             <?= Component::createInputText('iduser', '', $_SESSION['iduser'], '', false, 'hidden'); ?>
             <?= Component::createInputSelect('typeamount', 'Tipo importo', ['E' => 'Entrate', 'U' => 'Uscite'], false) ?>
             <?= Component::createInputText('amount', 'Importo', '', '0', true, 'number'); ?>
-            <?= Component::createInputText('description', 'Descrizione', '', '', true); ?>
-            <?= Component::createInputSelect('categoryid', 'Categoria', $categories, false, true); ?>
-            <?= Component::createInputSelect('paymenttypeid', 'Modalità di pagamento', $paymenttypes, false, true); ?>
+            <?= Component::createInputText('description', 'Descrizione', '', ''); ?>
+            <?= Component::createInputSelect('categoryid', 'Categoria', $categories, false); ?>
+            <?= Component::createInputSelect('paymenttypeid', 'Modalità di pagamento', $paymenttypes, false); ?>
             <?= Component::createInputText('paymentdate', 'Data di pagamento', '', '', true, 'date'); ?>
             <?= Component::createSubmitButton('Inserisci', 'secondary'); ?>
         </form>

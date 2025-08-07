@@ -19,7 +19,7 @@ class PasswordController
      */
     public function insertService($data)
     {
-        if (!empty($data['name']) && !empty($data['description'])) {
+        if (!empty($data['name'])) {
             return $this->service->insertService(
                 trim($data['name']),
                 trim($data['description']),
