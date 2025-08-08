@@ -114,6 +114,30 @@ class Auth {
         return $users;
     }
 
+    /**
+     * Ottiene gli utenti con paginazione e ordinamento lato database
+     */
+    public function getUsersPaginated($params = []) {
+        require_once("./system/DatabasePagination.class.php");
+        
+        $pagination = new DatabasePagination($this->table, 'id', 'firstname', 'ASC');
+        
+        $where = '';
+        if (isset($params['admin']) && $params['admin'] !== null) {
+            $where = "WHERE admin = " . (int)$params['admin'];
+        }
+        
+        $result = $pagination->getPaginatedData([
+            'page' => $params['page'] ?? 1,
+            'itemsPerPage' => $params['itemsPerPage'] ?? 10,
+            'sortColumn' => $params['sortColumn'] ?? 'firstname',
+            'sortDirection' => $params['sortDirection'] ?? 'ASC',
+            'where' => $where
+        ]);
+        
+        return $result;
+    }
+
     public function deleteUserById($id) {
         global $conn;
 

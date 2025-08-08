@@ -160,6 +160,36 @@ class AuthController {
         return $userList;
     }
 
+    /**
+     * Ottiene la lista utenti con paginazione e ordinamento lato database
+     */
+    public function listUserTablePaginated($params = []) {
+        $result = $this->user->getUsersPaginated($params);
+        
+        $userList = array(
+            array('Nome', 'Cognome', 'Email', 'Admin', 'Actions') // Intestazione
+        );
+        
+        $userArray = array();
+        if ($result['data']) {
+            foreach ($result['data'] as $userData) {
+                $userArray[] = [ 
+                    ucfirst($userData['firstname']), 
+                    ucfirst($userData['familyname']), 
+                    strtolower($userData['email']), 
+                    $userData['admin'],
+                    $userData['id']
+                ];
+            }
+            $userList = array_merge($userList, $userArray);
+        }
+    
+        return [
+            'data' => $userList,
+            'pagination' => $result['pagination']
+        ];
+    }
+
     public function removeUser() {
         if (!empty($this->userData['deleteid']) && isset($this->userData['deleteid'])) {
             if ($this->user->deleteUserById($this->userData['deleteid'])) {

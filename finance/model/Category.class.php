@@ -39,6 +39,22 @@ class Category {
         return $categories;
     }
 
+    /**
+     * Ottiene le categorie con paginazione e ordinamento lato database
+     */
+    public function getCategoryPaginated($params = []) {
+        require_once("./system/DatabasePagination.class.php");
+        
+        $pagination = new DatabasePagination($this->table, 'id', 'category', 'ASC');
+        
+        return $pagination->getPaginatedData([
+            'page' => $params['page'] ?? 1,
+            'itemsPerPage' => $params['itemsPerPage'] ?? 10,
+            'sortColumn' => $params['sortColumn'] ?? 'category',
+            'sortDirection' => $params['sortDirection'] ?? 'ASC'
+        ]);
+    }
+
     public function deleteCategoryById($id) {
         global $conn;
 

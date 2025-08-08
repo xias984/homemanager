@@ -1,7 +1,35 @@
 <?php
 require("./auth/controller/AuthController.class.php");
+require("./system/TableHelper.class.php");
+
 $users = new AuthController($_GET);
-$userData = $users->listUserTable();
+
+// Parametri per la paginazione lato database
+$paginationParams = [
+    'page' => isset($_GET['page']) ? (int)$_GET['page'] : 1,
+    'itemsPerPage' => isset($_GET['itemsPerPage']) ? (int)$_GET['itemsPerPage'] : 10,
+    'sortColumn' => $_GET['sort'] ?? 'firstname',
+    'sortDirection' => $_GET['direction'] ?? 'ASC'
+];
+
+// Ottieni dati con paginazione lato database
+$result = $users->listUserTablePaginated($paginationParams);
+$userData = $result['data'];
+
+// Inizializza TableHelper per paginazione e ordinamento
+$tableHelper = TableHelper::createWithDatabasePagination($result['pagination'], $paginationParams['itemsPerPage']);
+$tableHelper->setData($userData);
+
+// Imposta la mappatura delle colonne per la tabella utenti
+$tableHelper->setColumnMapping([
+    0 => 'firstname',  // Nome
+    1 => 'familyname', // Cognome
+    2 => 'email',      // Email
+    3 => 'admin',      // Admin
+    4 => 'id'          // Actions (ID)
+]);
+
+$paginatedData = $tableHelper->getPaginatedData();
 
 if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
     $users->removeUser();
@@ -12,18 +40,29 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
 }
 ?>
 <?= Component::createTitle('Lista utenti') ?>
+
+<!-- Controlli paginazione -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <?= $tableHelper->getPaginationSummary() ?>
+    </div>
+    <div class="col-md-6 text-end">
+        <?= $tableHelper->getItemsPerPageSelector() ?>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-12" style="overflow-x: auto;">
         <table class="table responsive">
             <thead>
                 <tr>
-                <?php foreach ($userData[0] as $header) { ?>
-                    <th scope="col"><?=$header?></th>
+                <?php foreach ($paginatedData[0] as $key => $header) { ?>
+                    <th scope="col"><?= $tableHelper->createSortableHeader($key, $header) ?></th>
                 <?php }?>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach (array_slice($userData, 1) as $user) {
+                <?php foreach (array_slice($paginatedData, 1) as $user) {
                 if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $user[4]) {
                     echo '<form action="" method="post" id="edituser">';
                 }    
@@ -68,5 +107,12 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
             } ?>
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Paginazione -->
+<div class="row mt-3">
+    <div class="col-md-12">
+        <?= $tableHelper->createPaginationLinks() ?>
     </div>
 </div>

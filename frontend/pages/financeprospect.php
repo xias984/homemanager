@@ -1,5 +1,6 @@
 <?php
 require("./finance/controller/FinanceController.class.php");
+require("./system/TableHelper.class.php");
 global $monthsList;
 global $colors;
 
@@ -13,10 +14,47 @@ $finances = new FinanceController();
 $allFinances = $finances->selectFinances();
 $monthsWithNames = createMonthsWithYear($allFinances, 'paymentdate');
 
-// Ora applica i filtri per i dati da mostrare
-$financesArray = $finances->selectFinances($_POST);
+// Parametri per la paginazione lato database
+$paginationParams = [
+    'page' => $_GET['page'] ?? 1,
+    'itemsPerPage' => $_GET['itemsPerPage'] ?? 15,
+    'sortColumn' => $_GET['sort'] ?? 'paymentdate',
+    'sortDirection' => $_GET['direction'] ?? 'DESC'
+];
+
+// Ottieni dati con paginazione lato database
+$result = $finances->selectFinancesPaginated($_POST, $paginationParams);
+$financesArray = $result['data'];
 $categories = $finances->selectCategories();
 $paymenttypes = $finances->selectPaymentTypes();
+
+// Prepara i dati per la tabella con paginazione
+$tableData = [
+    ['Data pagamento', 'Tipo', 'Categoria', 'Modalità di pagamento', 'Importo', 'Note', 'Actions']
+];
+
+// Mappa per mantenere i dati originali
+$originalDataMap = [];
+
+if ($financesArray && is_array($financesArray)) {
+    foreach ($financesArray as $financeValue) {
+        $tableData[] = [
+            date('d/m/Y', strtotime($financeValue['paymentdate'])),
+            $financeValue['type'] == 'E' ? 'Entrata' : 'Uscita',
+            $financeValue['category'],
+            $financeValue['paymenttype'],
+            $financeValue['amount'] . ' €',
+            $financeValue['description'],
+            $financeValue['id'] // ID per le azioni
+        ];
+        $originalDataMap[$financeValue['id']] = $financeValue;
+    }
+}
+
+// Inizializza TableHelper per paginazione e ordinamento
+$tableHelper = TableHelper::createWithDatabasePagination($result['pagination'], $paginationParams['itemsPerPage']);
+$tableHelper->setData($tableData);
+$paginatedData = $tableHelper->getPaginatedData();
 
 $amountTot = [
     'E' => ['done' => 0, 'notdone' => 0],
@@ -109,21 +147,28 @@ if (isset($_GET['payid']) && !empty($_GET['payid'])) {
 
 <div>&nbsp;</div>
 
+<!-- Controlli paginazione -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <?= $tableHelper->getPaginationSummary() ?>
+    </div>
+    <div class="col-md-6 text-end">
+        <?= $tableHelper->getItemsPerPageSelector() ?>
+    </div>
+</div>
+
 <div class="col-md-12" id="table-container" style="text-align:center; overflow-x: auto;">
     <table class="table responsive">
         <thead>
             <tr>
-                <th scope="col">Data pagamento</th>
-                <th scope="col">Tipo</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Modalità di pagamento</th>
-                <th scope="col">Importo</th>
-                <th scope="col">Note</th>
-                <th scope="col">Actions</th>
+                <?php foreach ($paginatedData[0] as $key => $header) { ?>
+                    <th scope="col"><?= $tableHelper->createSortableHeader($key, $header) ?></th>
+                <?php } ?>
             </tr>
         </thead>
         <tbody>
-            <?php foreach($financesArray as $financeValue) { 
+            <?php foreach(array_slice($paginatedData, 1) as $row) { 
+                $financeValue = $originalDataMap[$row[6]]; // Usa l'ID dalla riga paginata per ottenere i dati originali
                 if (!empty($_GET['edittransaction']) && isset($_GET['edittransaction']) && $_GET['edittransaction'] == $financeValue['id']) {
                     echo '<form action="" method="post" id="edittransaction">';
                 }
@@ -236,4 +281,11 @@ if (isset($_GET['payid']) && !empty($_GET['payid'])) {
             </tr>
         </tfoot>
     </table>
+</div>
+
+<!-- Paginazione -->
+<div class="row mt-3">
+    <div class="col-md-12 text-center">
+        <?= $tableHelper->createPaginationLinks() ?>
+    </div>
 </div>

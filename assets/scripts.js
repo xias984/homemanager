@@ -33,3 +33,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Funzione per gestire il cambio di elementi per pagina
+function changeItemsPerPage(value) {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('itemsPerPage', value);
+    urlParams.delete('page'); // Reset alla prima pagina
+    window.location.search = urlParams.toString();
+}

@@ -1,8 +1,34 @@
 <?php
 require("./finance/controller/FinanceController.class.php");
+require("./system/TableHelper.class.php");
 
 $paymenttype = new FinanceController();
-$paymenttypeData = $paymenttype->listPaymentTypeTable();
+
+// Parametri per la paginazione lato database
+$paginationParams = [
+    'page' => $_GET['page'] ?? 1,
+    'itemsPerPage' => $_GET['itemsPerPage'] ?? 10,
+    'sortColumn' => $_GET['sort'] ?? 'paymenttype',
+    'sortDirection' => $_GET['direction'] ?? 'ASC'
+];
+
+// Ottieni dati con paginazione lato database
+$result = $paymenttype->listPaymentTypeTablePaginated($paginationParams);
+$paymenttypeData = $result['data'];
+
+// Inizializza TableHelper per paginazione e ordinamento
+$tableHelper = TableHelper::createWithDatabasePagination($result['pagination'], $paginationParams['itemsPerPage']);
+$tableHelper->setData($paymenttypeData);
+
+// Imposta la mappatura delle colonne per la tabella metodi di pagamento
+$tableHelper->setColumnMapping([
+    0 => 'paymenttype',     // Metodo di pagamento
+    1 => 'iduser',          // Inserito da
+    2 => 'datainserimento', // Data inserimento
+    3 => 'id'               // Actions (ID)
+]);
+
+$paginatedData = $tableHelper->getPaginatedData();
 
 if (!empty($_POST['paymenttype'])) {
     $paymenttype->registerPaymentType($_POST['paymenttype']);
@@ -33,19 +59,29 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
 
 <div class="row">&nbsp;</div>
 
+<!-- Controlli paginazione -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <?= $tableHelper->getPaginationSummary() ?>
+    </div>
+    <div class="col-md-6 text-end">
+        <?= $tableHelper->getItemsPerPageSelector() ?>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8" style="overflow-x: auto;">
         <table class="table responsive" style="text-align:center">
             <thead>
                 <tr>
-                    <?php foreach ($paymenttypeData[0] as $header) { ?>
-                    <th scope="col"><?=$header?></th>
+                    <?php foreach ($paginatedData[0] as $key => $header) { ?>
+                    <th scope="col"><?= $tableHelper->createSortableHeader($key, $header) ?></th>
                     <?php }?>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach (array_slice($paymenttypeData, 1) as $paymenttype):
+                <?php foreach (array_slice($paginatedData, 1) as $paymenttype):
                     if (!empty($_GET['editid']) && isset($_GET['editid']) && $_GET['editid'] == $paymenttype[3]) {
                         echo '<form action="" method="post" id="editpaymenttype">';
                     }
@@ -82,4 +118,11 @@ if (!empty($_GET['deleteid']) && isset($_GET['deleteid'])) {
         </table>
     </div>
     <div class="col-md-2"></div>
+</div>
+
+<!-- Paginazione -->
+<div class="row mt-3">
+    <div class="col-md-12 text-center">
+        <?= $tableHelper->createPaginationLinks() ?>
+    </div>
 </div>

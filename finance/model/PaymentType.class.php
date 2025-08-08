@@ -38,6 +38,22 @@ class PaymentType {
         return $paymentTypes;
     }
 
+    /**
+     * Ottiene i metodi di pagamento con paginazione e ordinamento lato database
+     */
+    public function getPaymentTypesPaginated($params = []) {
+        require_once("./system/DatabasePagination.class.php");
+        
+        $pagination = new DatabasePagination($this->table, 'id', 'paymenttype', 'ASC');
+        
+        return $pagination->getPaginatedData([
+            'page' => $params['page'] ?? 1,
+            'itemsPerPage' => $params['itemsPerPage'] ?? 10,
+            'sortColumn' => $params['sortColumn'] ?? 'paymenttype',
+            'sortDirection' => $params['sortDirection'] ?? 'ASC'
+        ]);
+    }
+
     public function deletePaymentTypeById($id) {
         global $conn;
 

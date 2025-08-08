@@ -52,6 +52,35 @@ class FinanceController
         return $categoryArray;
     }
 
+    /**
+     * Ottiene la lista categorie con paginazione e ordinamento lato database
+     */
+    public function listCategoryTablePaginated($params = []) {
+        $result = $this->category->getCategoryPaginated($params);
+        
+        $categoryList = array(
+            array('Categoria', 'Inserita da', 'Data inserimento', 'Actions') // Intestazione
+        );
+
+        $categoryArray = array();
+        if ($result['data']) {
+            foreach ($result['data'] as $category) {
+                $categoryArray[] = [
+                    ucfirst($category['category']),
+                    ucfirst($this->user->getInfoUserById($category['iduser'])['firstname']),
+                    date('d/m/Y', strtotime($category['datainserimento'])),
+                    $category['id']
+                ];
+            }
+        }
+        $categoryArray = array_merge($categoryList, $categoryArray);
+
+        return [
+            'data' => $categoryArray,
+            'pagination' => $result['pagination']
+        ];
+    }
+
     public function removeCategory($categoryId) {
         if (!empty($categoryId) && isset($categoryId)) {
             if ($this->category->deleteCategoryById($categoryId)) {
@@ -132,6 +161,35 @@ class FinanceController
         $paymentTypeArray = array_merge($paymentTypeList, $paymentTypeArray);
 
         return $paymentTypeArray;
+    }
+
+    /**
+     * Ottiene la lista metodi di pagamento con paginazione e ordinamento lato database
+     */
+    public function listPaymentTypeTablePaginated($params = []) {
+        $result = $this->paymentType->getPaymentTypesPaginated($params);
+        
+        $paymentTypeList = array(
+            array('Metodo di pagamento', 'Inserito da', 'Data inserimento', 'Actions') // Intestazione
+        );
+
+        $paymentTypeArray = array();
+        if ($result['data']) {
+            foreach ($result['data'] as $paymentType) {
+                $paymentTypeArray[] = [
+                    $paymentType['paymenttype'],
+                    ucfirst($this->user->getInfoUserById($paymentType['iduser'])['firstname']),
+                    date('d/m/Y', strtotime($paymentType['datainserimento'])),
+                    $paymentType['id']
+                ];
+            }
+        }
+        $paymentTypeArray = array_merge($paymentTypeList, $paymentTypeArray);
+
+        return [
+            'data' => $paymentTypeArray,
+            'pagination' => $result['pagination']
+        ];
     }
 
     public function removePaymentType($paymentTypeId) {
@@ -224,6 +282,35 @@ class FinanceController
             );
         }
         return $financesArray;
+    }
+
+    /**
+     * Ottiene le transazioni finanziarie con paginazione e ordinamento lato database
+     */
+    public function selectFinancesPaginated($filters = null, $params = []) {
+        $result = $this->finance->getTransactionsPaginated($filters, $params);
+        
+        $financesArray = array();
+        if ($result['data']) {
+            foreach ($result['data'] as $value) {
+                $financesArray[] = array(
+                    "id" => $value['id'],
+                    "user" => $this->user->getInfoUserById($value['userid'])['firstname'],
+                    "type" => $value['type'],
+                    "amount" => $value['amount'],
+                    "description" => $value['description'],
+                    "category" => isset($value['categoryid']) ? ($this->category->getCategoryById($value['categoryid'])['category'] ?? 'ND') : 'ND',
+                    "paymenttype" => isset($value['paymenttypeid']) ? ($this->paymentType->getPaymentTypeById($value['paymenttypeid'])['paymenttype'] ?? 'ND') : 'ND',
+                    "paymentdate" => $value['paymentdate'],
+                    "payed" => $value['payed']
+                );
+            }
+        }
+        
+        return [
+            'data' => $financesArray,
+            'pagination' => $result['pagination']
+        ];
     }
 /*
     public function editUser($userPost) {

@@ -163,6 +163,90 @@ class Finance {
     
         return $finances;
     }
+
+    /**
+     * Ottiene le transazioni con paginazione e ordinamento lato database
+     */
+    public function getTransactionsPaginated($filters = [], $params = []) {
+        require_once("./system/DatabasePagination.class.php");
+        
+        $pagination = new DatabasePagination($this->table, 'id', 'paymentdate', 'DESC');
+        
+        // Costruisci la clausola WHERE
+        $where = " WHERE 1 = 1";
+    
+        // Helper function to handle IN clauses
+        $addInClause = function($field, $values) use (&$where) {
+            if (!empty($values) && is_array($values)) {
+                $sanitizedValues = array_map(function($value) {
+                    return '"' . addslashes($value) . '"';
+                }, $values);
+                $where .= " AND $field IN (" . implode(',', $sanitizedValues) . ")";
+            }
+        };
+    
+        // Add conditions
+        if (isset($filters['types'])) {
+            $addInClause('type', $filters['types']);
+        }
+    
+        if (isset($filters['categoryid'])) {
+            $addInClause('categoryid', $filters['categoryid']);
+        }
+    
+        if (isset($filters['paymenttypeid'])) {
+            $addInClause('paymenttypeid', $filters['paymenttypeid']);
+        }
+    
+        if (isset($filters['searchbox']) && !empty($filters['searchbox'])) {
+            $searchbox = addslashes($filters['searchbox']);
+            $where .= " AND description LIKE '%$searchbox%'";
+        }
+
+        if (isset($filters['payed']) && !empty($filters['payed'])) {
+            $where .= " AND payed = 1";
+        }
+
+        if (isset($filters['notpayed']) && !empty($filters['notpayed'])) {
+            $where .= " AND payed = 0";
+        }
+
+        if (isset($filters['periodo']) && !empty($filters['periodo']) && is_array($filters['periodo'])) {
+            $periodConditions = [];
+            
+            foreach ($filters['periodo'] as $period) {
+                if (strpos($period, '-') !== false) {
+                    // Formato mese-anno (es: "06-2024")
+                    list($month, $year) = explode('-', $period);
+                    $month = (int) $month;
+                    $year = (int) $year;
+                    
+                    if ($month >= 1 && $month <= 12 && $year > 0) {
+                        $periodConditions[] = "(MONTH(paymentdate) = $month AND YEAR(paymentdate) = $year)";
+                    }
+                } else {
+                    // Formato solo mese (backward compatibility)
+                    $month = (int) $period;
+                    if ($month >= 1 && $month <= 12) {
+                        $periodConditions[] = "MONTH(paymentdate) = $month";
+                    }
+                }
+            }
+            
+            // Verifica che ci siano condizioni valide
+            if (!empty($periodConditions)) {
+                $where .= " AND (" . implode(' OR ', $periodConditions) . ")";
+            }
+        }
+        
+        return $pagination->getPaginatedData([
+            'page' => $params['page'] ?? 1,
+            'itemsPerPage' => $params['itemsPerPage'] ?? 15,
+            'sortColumn' => $params['sortColumn'] ?? 'paymentdate',
+            'sortDirection' => $params['sortDirection'] ?? 'DESC',
+            'where' => $where
+        ]);
+    }
     
     public function getTransactionById($financeId) {
         global $conn;

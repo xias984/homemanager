@@ -102,6 +102,30 @@ ob_start();
         cursor: pointer;
     }
 
+    /* Stili per la paginazione e ordinamento */
+    .pagination .page-link {
+        color: <?=$colors['link']?>;
+        border-color: <?=$colors['sfondo2']?>;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: <?=$colors['link']?>;
+        border-color: <?=$colors['link']?>;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: <?=$colors['subtitle']?>;
+        border-color: <?=$colors['sfondo2']?>;
+    }
+
+    .table th a {
+        color: <?=$colors['link']?>;
+    }
+
+    .table th a:hover {
+        color: <?=$colors['secondario']?>;
+    }
+
     /* Form dashboard */
     .custom-form {
         display: flex;
